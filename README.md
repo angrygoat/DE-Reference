@@ -1,7 +1,7 @@
 ## DE Reference
 ### Developers: Mike Conway (DFC), Don Sizemore (Odum Institute)
-### Version:
-### Date:
+### Version: 2.5.0.0
+### Date: 08/22/2016
 ### Git Tag:
 
 ------------------------------------------------------------
