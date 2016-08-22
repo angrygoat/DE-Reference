@@ -1,5 +1,10 @@
 #!/bin/bash -x
 
+
+USER="$1"
+ZONE="$2"
+DE_RODSADMIN = "$3"
+
 colls='/
 /$ZONE
 /$ZONE/home

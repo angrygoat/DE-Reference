@@ -1,5 +1,9 @@
 #!/bin/sh
 
+USER="$1"
+ZONE="$2"
+DE_RODSADMIN = "$3"
+
 echo "make /zone/home globally readable"
 ichmod read public /$ZONE/home
 
