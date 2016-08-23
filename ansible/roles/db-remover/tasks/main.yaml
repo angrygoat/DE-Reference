@@ -34,7 +34,7 @@
 
 
 - name: drop the notification database
-  postgresql_db: name={{notification_db_name}} state=absent login_host={{notification_db_host}} port={{notification_db_port}}  login_user={{db_admin}} login_password={{db_admin_password}}
+  postgresql_db: name={{notification_db_name}} state=absent login_host={{notification_db_host}} port={{notification_db_port}} login_user={{db_admin}} login_password={{db_admin_password}}
   tags:
     - notification_database
 
