@@ -1,0 +1,4 @@
+- name: drop de databases and users
+  hosts: db
+  sudo: yes
+  sudo_user: root

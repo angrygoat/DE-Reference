@@ -1,0 +1,52 @@
+---
+# drops the users and databases for DE, run with caution!!
+# assume prereqs.yaml has already installed/configured postgres. otherwise, include postgres.yaml
+#- include: postgres.yaml
+
+- name: drop user for the de database
+  postgresql_user: name={{db_user}} state=absent login_host={{db_host}} port={{db_port}} login_user={{db_admin}} login_password={{db_admin_password}}
+  tags:
+    - de_database
+  ignore_errors: yes # done to allow rerunability
+
+
+- name: drop the de database
+  postgresql_db: name={{db_name}} state=absent login_host={{db_host}} port={{db_port}} login_user={{db_user}} login_password={{db_password}}
+
+
+- name: drop user for the jex database
+  postgresql_user: name={{jexdb.user}} password={{jexdb.password}} state=absent login_host={{jexdb.host}} port={{jexdb.port}} login_user={{db_admin}} login_password={{db_admin_password}}
+  tags:
+    - jex_database
+  ignore_errors: yes # done to allow rerunability
+
+
+- name: drop the jex database
+  postgresql_db: name={{jexdb.db}} state=absent login_host={{jexdb.host}} port={{jexdb.port}} login_user={{jexdb.user}} login_password={{jexdb.password}}
+  tags:
+    - jex_database
+
+- name: drop user for the notification database
+  postgresql_user: name={{notification_db_user}} password={{notification_db_password}} state=absent login_host={{notification_db_host}} port={{notification_db_port}} login_user={{db_admin}} login_password={{db_admin_password}}
+  tags:
+    - notification_database
+  ignore_errors: yes # done to allow rerunability
+
+
+- name: drop the notification database
+  postgresql_db: name={{notification_db_name}} state=absent login_host={{notification_db_host}} port={{notification_db_port}} login_user={{notification_db_user}} login_password={{notification_db_password}}
+  tags:
+    - notification_database
+
+
+- name: drop user for the metadata database
+  postgresql_user: name={{metadata_db_user}} password={{metadata_db_password}} state=absent login_host={{metadata_db_host}} port={{metadata_db_port}} login_user={{db_admin}} login_password={{db_admin_password}}
+  tags:
+    - metadata_database
+  ignore_errors: yes # done to allow rerunability
+
+- name: drop the metadata database
+  postgresql_db: name={{metadata_db_name}} state=absent login_host={{metadata_db_host}} port={{metadata_db_port}} login_user={{metadata_db_user}} login_password={{metadata_db_password}}
+  register: postgresql_db_result
+  tags:
+    - metadata_database
