@@ -1,0 +1,64 @@
+{
+  "file" : { 
+    "properties" : { 
+      "id" : { 
+        "type"  : "string",
+        "index" : "not_analyzed"
+      },  
+      "path" : { 
+        "type"     : "string",
+        "analyzer" : "irods_path" 
+      },  
+      "userPermissions" : {
+        "type"       : "nested",
+        "properties" : { 
+          "permission" : { 
+            "type"     : "string",
+            "index"    : "not_analyzed" 
+          },  
+          "user" : { 
+            "type"     : "string",
+            "index"    : "not_analyzed"
+          }   
+        }   
+      },  
+      "creator" : {
+        "type"     : "string",
+        "index"    : "not_analyzed" 
+      },  
+      "dateCreated" : {
+        "type" : "date" 
+      },  
+      "dateModified" : {
+        "type" : "date" 
+      },
+      "fileSize" : {
+        "type" : "long"
+      },  
+      "label" : { 
+        "type"     : "string",
+        "analyzer" : "irods_entity" 
+      },
+      "fileType" : {
+        "type"  : "string",
+        "index" : "not_analyzed"
+      },
+      "metadata" : { 
+        "type"       : "nested",
+        "properties" : { 
+          "attribute" : { 
+            "type"     : "string",
+            "analyzer" : "irods_entity"
+          },  
+          "value" : { 
+            "type" : "string"
+          },  
+          "unit" : { 
+            "type" :     "string",
+            "analyzer" : "keyword"
+          }   
+        }   
+      }   
+    }   
+  }
+}

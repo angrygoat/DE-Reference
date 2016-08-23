@@ -1,0 +1,25 @@
+# Uploads a configuration settings to elasticsearch
+# 
+# vars:
+#   path - The URL path relative to the index to receive the settings
+#   file - The file containing the JSON encoded settings 
+---
+# - name: upload configuration {{ file }}
+#  shell:
+# uri: url={{ data_resource_url }}/{{ path }} method=PUT
+#      body={{ lookup('file', file)|replace('\n', '')|to_nice_json }}
+- name: copy file to box
+  copy: src={{ file }} dest=/tmp/{{file}} owner=root group=root mode=0644
+  tags:
+      - config
+      - config_elasticsearch
+
+#- name: clean up that file breh
+#  shell: "cat {{ file }}-pre | |replace('\n', '')|to_nice_json >> {{ file }}"
+
+- name: curl json because uri module barfs
+  shell: "curl -v -XPUT {{data_resource_url}}/{{path}} --data-binary @/tmp/{{file}}"
+
+  tags:
+      - config
+      - config_elasticsearch
