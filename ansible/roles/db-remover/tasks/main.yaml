@@ -45,7 +45,8 @@
     - metadata_database
   ignore_errors: yes # done to allow rerunability
 
-- name: drop the metadata database login_user={{db_admin}} login_password={{db_admin_password}} login_user={{metadata_db_user}}
+- name: drop the metadata database
   register: postgresql_db_result
+  postgresql_db: name={{metadata_db_name}} state=absent login_host={{metadata_db_host}} port={{metadata_db_port}} login_user={{db_admin}} login_password={{db_admin_password}}
   tags:
     - metadata_database
