@@ -21,7 +21,7 @@
     #                               else 'false' }}"
 
 
-    elasticsearch_node_master: true #temp shim MC see https://github.com/angrygoat/DE-Reference/issues/4
+    #elasticsearch_node_master: true #temp shim MC see https://github.com/angrygoat/DE-Reference/issues/4
 
     elasticsearch_node_name:                     node-{{ ansible_hostname }}
     elasticsearch_node_max_local_storage_nodes:  1
