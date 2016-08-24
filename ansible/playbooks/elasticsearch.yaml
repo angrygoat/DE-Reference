@@ -16,9 +16,12 @@
     elasticsearch_number_of_replicas:                   "{{ groups['elasticsearch']|length - 1 }}"  # This is a hack to work around a bug in the gpstathis.elasticsearch role
     elasticsearch_memory_bootstrap_mlockall:            true
 
-    elasticsearch_node_master: "{{ 'true' if [ansible_hostname, ansible_domain]|join('.') == 
-                                             groups['elasticsearch']|first
-                                   else 'false' }}"
+    #elasticsearch_node_master: "{{ 'true' if [ansible_hostname, ansible_domain]|join('.') ==
+    #                                         groups['elasticsearch']|first
+    #                               else 'false' }}"
+
+
+    elasticsearch_node_master: true #temp shim MC see https://github.com/angrygoat/DE-Reference/issues/4
 
     elasticsearch_node_name:                     node-{{ ansible_hostname }}
     elasticsearch_node_max_local_storage_nodes:  1
