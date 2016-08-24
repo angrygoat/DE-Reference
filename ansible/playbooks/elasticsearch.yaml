@@ -38,5 +38,5 @@
 
   roles:
     - gpstathis.elasticsearch # check requirements.yaml, this has been replaced with a DICE fork
-    - { role: elasticsearch-master, when: elasticsearch_node_master }
-
+   # - { role: elasticsearch-master, when: elasticsearch_node_master }
+    - elasticsearch-master
