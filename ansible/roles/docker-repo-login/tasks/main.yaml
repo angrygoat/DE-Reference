@@ -1,0 +1,36 @@
+## this isn't new enough. use docker-py below.
+#- name: ensure docker-python installed for ansible module
+#  yum: name=docker-python state=latest
+#  tags: docker
+
+- name: install docker-py
+  sudo: yes
+  pip:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - docker-py>=1.2.3
+    - six>=1.4.0
+  tags: docker
+  #pip: name=docker-py version=1.1.0 state=present
+
+
+- name: create a dir for the self signed certificate
+  sudo: yes
+  file: path=/etc/docker/certs.d/{{ docker.registry.host }} state=directory mode=0700
+  tags:
+      - docker-registry
+
+- name: copy domain cert to ca.crt in dropin directory
+  sudo: yes
+  copy: src={{ docker.registry.cert_dir }}{{docker.registry.public_key}} dest=/etc/docker/certs.d/{{ docker.registry.base }}/ owner=root group=root mode=0644
+  tags:
+        - docker-registry
+
+
+- name: login to private Docker remote registry
+  docker_login:
+    registry: "{{ docker.registry.base }}"
+    username: "{{ docker.registry.user }}"
+    password: "{{ docker.registry.pass }}"
+  tags: docker

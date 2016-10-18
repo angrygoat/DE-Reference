@@ -8,7 +8,16 @@ These will be factored out as DE and DE-Reference are refactored.
 
 ## Before main DE
 
+### iRODS Prep
 
+This is provisional, per: 
+
+* install iRODS
+* run irods pbs or manually integrate iRODS DE policies into policy set
+* build and install addAvu microservice from [here](https://github.com/angrygoat/irods-setavu-plugin) as appropriate for the iRODS version (see releases)
+* run utils/irods-provisioning/DE-irods_prep.sh for configured user/zone
+* run utils/irods-provisioning/add_irods_user.sh for configured user/zone
+* run utils/irods-provisioning/adduuids.sh for configured user
 
 
 
