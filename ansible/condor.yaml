@@ -1,0 +1,7 @@
+- name: install Condor packages on necessary hosts
+  hosts: condor:condor-submission
+
+  sudo: yes
+  sudo_user: root
+  roles:
+    - role: condor
