@@ -21,6 +21,42 @@ Doing this results in
 * install ansible on each machine
 ``` yum install ansible ```
 
+
+
+### iRODS Prep
+
+This is provisional, but installs the required rules and microservices that DE depends on
+
+* install iRODS
+* run irods pbs or manually integrate iRODS DE policies into policy set
+* build and install addAvu microservice from [here](https://github.com/angrygoat/irods-setavu-plugin) as appropriate for the iRODS version (see releases)
+* run utils/irods-provisioning/DE-irods_prep.sh for configured user/zone
+* run utils/irods-provisioning/add_irods_user.sh for configured user/zone
+* run utils/irods-provisioning/adduuids.sh for configured user
+
+### Install ansible galaxy requirements
+
+* cd to the ansible/galaxy dir
+
+* run ansible-galaxy install for the requirements
+
+```
+[ansible@dfc-de-ui playbooks]$ sudo ansible-galaxy install -r requirements.yaml 
+[sudo] password for ansible: 
+- extracting gpstathis.elasticsearch to /etc/ansible/roles/gpstathis.elasticsearch
+- gpstathis.elasticsearch was installed successfully
+- extracting Rackspace_Automation.epel to /etc/ansible/roles/Rackspace_Automation.epel
+- Rackspace_Automation.epel was installed successfully
+- extracting Rackspace_Automation.rabbitmq to /etc/ansible/roles/Rackspace_Automation.rabbitmq
+- Rackspace_Automation.rabbitmq was installed successfully
+- dependency Rackspace_Automation.epel is already installed, skipping.
+
+
+```
+
+
+
+
 ### Prerequisite Playbooks
 * install CentOS library prereqs: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/prereqs.yaml**
 * configure iptables: **$ ansible-playbook -i inventory -e @group_vars -s -K iptables.yaml**
@@ -327,3 +363,17 @@ This is configured in your group vars under iplant_groups_docker_repo
 
 ### Custom UI container
 * note that the UI container must container appropriate PKCS/javastore keys to talk to CAS/LDAP. This will require a custom UI container per installation, determined by the group_var de.docker_repository:
+
+
+### Install ElasticSearch for metadata/tags
+
+
+ElasticSearch is used for metadata and tag search, this is distinct from the use of the elk stack in a separate container for log file management
+
+
+```
+
+ ansible-playbook -i /home/ansible/ansible-vars/inventory -e @/home/ansible/ansible-vars/group_vars.yaml -s  -vvvv playbooks/elasticsearch.yaml
+
+
+```

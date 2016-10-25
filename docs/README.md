@@ -1,4 +1,4 @@
-## Welcome to the AngryGoat Discovery Environment wiki!
+## Welcome to the DFC Discovery Environment wiki!
 
 Please find in these pages documentation to assist newcomers in standing up their own instance of the Cyverse Discovery Environment. Note that [Cyverse's repository](https://github.com/cyverse/DE/tree/master/ansible) includes master playbooks for Discovery Environment-specific services and configuration, while the forthcoming Community Edition aims to provide additional/optional playbooks for related services (Condor, iRODS, etc.) to allow installation from scratch. In the mean time, please feel free to use this repository as a reference implementation.
 
