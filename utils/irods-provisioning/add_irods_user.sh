@@ -4,11 +4,6 @@ USER="$1"
 ZONE="$2"
 DE_RODSADMIN="$3"
 
-if [ "$#" -ne 1 ]; then
-   echo "Please enter a username."
-   exit 1;
-fi
-
 echo "create $USER"
 iadmin mkuser $USER rodsuser
 
