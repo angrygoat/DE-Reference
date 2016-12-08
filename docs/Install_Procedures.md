@@ -3,7 +3,7 @@
 For the purposes of this fork of DE, we standardized on CentOS 7 VMs, though the number required will be up to the organization. Some services (jex, condor log monitor, condor) need to run on the same machine but most may be safely run on their own node or on shared hardware. Note that if you intend to run all internal services on one node, you'll want to throw a fair amount of resources at that box. Elasticsearch in particular may require a larger RAM allocation, and Condor will need the CPU, RAM, and disk space (/var) to accommodate the needs of your users.
 
 ### Ansible Setup
-* Create a privileged Ansible user on all boxes, select a head node, generate ssh key, distribute public keys, grant sudo to Ansible user.
+* Create a privileged Ansible user on all boxes, select a head node, generate ssh key, distribute public keys, grant sudo to Ansible user. Here's a good [reference](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2)
 * on ansible head node, create a de directory under the ansible home dir (this is just suggested).  Under this, 
 create an ansible-vars dir.  In here you will place your inventory file, and your Ansible group vars.  You can use the Annotated
 group vars and annotated inventory (TODO) as a start
@@ -20,47 +20,6 @@ Doing this results in
 
 * install ansible on each machine
 ``` yum install ansible ```
-
-
-
-### iRODS Prep
-
-This is provisional, but installs the required rules and microservices that DE depends on
-
-* install iRODS
-* run irods pbs or manually integrate iRODS DE policies into policy set
-* build and install addAvu microservice from [here](https://github.com/angrygoat/irods-setavu-plugin) as appropriate for the iRODS version (see releases)
-* run utils/irods-provisioning/DE-irods_prep.sh for configured user/zone
-* run utils/irods-provisioning/add_irods_user.sh for configured user/zone
-* run utils/irods-provisioning/adduuids.sh for configured user
-
-### Install ansible galaxy requirements
-
-* cd to the ansible/galaxy dir
-
-* run ansible-galaxy install for the requirements
-
-```
-[ansible@dfc-de-ui playbooks]$ sudo ansible-galaxy install -r requirements.yaml 
-[sudo] password for ansible: 
-- extracting gpstathis.elasticsearch to /etc/ansible/roles/gpstathis.elasticsearch
-- gpstathis.elasticsearch was installed successfully
-- extracting Rackspace_Automation.epel to /etc/ansible/roles/Rackspace_Automation.epel
-- Rackspace_Automation.epel was installed successfully
-- extracting Rackspace_Automation.rabbitmq to /etc/ansible/roles/Rackspace_Automation.rabbitmq
-- Rackspace_Automation.rabbitmq was installed successfully
-- dependency Rackspace_Automation.epel is already installed, skipping.
-
-
-```
-
-
-
-
-### Prerequisite Playbooks
-* install CentOS library prereqs: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/prereqs.yaml**
-* configure iptables: **$ ansible-playbook -i inventory -e @group_vars -s -K iptables.yaml**
-
 
 ## Data Container
 
@@ -95,11 +54,25 @@ docker images
 
 ```
 
+
+### Prerequisite Playbooks
+* install CentOS library prereqs: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/prereqs.yaml**
+* configure iptables: **$ ansible-playbook -i inventory -e @group_vars -s -K iptables.yaml**
+
+
+
 ### Misc Prereqs
 
 * install openJDK7 on services VM: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/java7.yaml**
 * install timezone packages: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/timezone.yaml**
 * install amqp: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/amqp-brokers.yaml**
+
+
+### Setup databases (if doing this manually, otherwise, skip ahead to the data container)
+
+* install postgres: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/postgres.yaml**
+* create DBs: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/db-creator.yaml**
+
 
 ### CAS/LDAP
 
@@ -363,17 +336,3 @@ This is configured in your group vars under iplant_groups_docker_repo
 
 ### Custom UI container
 * note that the UI container must container appropriate PKCS/javastore keys to talk to CAS/LDAP. This will require a custom UI container per installation, determined by the group_var de.docker_repository:
-
-
-### Install ElasticSearch for metadata/tags
-
-
-ElasticSearch is used for metadata and tag search, this is distinct from the use of the elk stack in a separate container for log file management
-
-
-```
-
- ansible-playbook -i /home/ansible/ansible-vars/inventory -e @/home/ansible/ansible-vars/group_vars.yaml -s  -vvvv playbooks/elasticsearch.yaml
-
-
-```

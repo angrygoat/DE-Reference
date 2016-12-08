@@ -1,0 +1,11 @@
+dn: cn=USERNAME, ou=Users, cn=CN
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: UID
+sn: LASTNAME
+uid: UID
+givenName: FIRSTNAME
+mail: EMAIL
+userPassword: PASSWORD
