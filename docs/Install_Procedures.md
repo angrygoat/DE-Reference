@@ -53,7 +53,7 @@ docker images
   937  docker push xxx.renci.org:443/de-data
 
 ```
-
+ 
 
 ### Prerequisite Playbooks
 * install CentOS library prereqs: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/prereqs.yaml**
