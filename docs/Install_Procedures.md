@@ -2,6 +2,22 @@
 
 For the purposes of this fork of DE, we standardized on CentOS 7 VMs, though the number required will be up to the organization. Some services (jex, condor log monitor, condor) need to run on the same machine but most may be safely run on their own node or on shared hardware. Note that if you intend to run all internal services on one node, you'll want to throw a fair amount of resources at that box. Elasticsearch in particular may require a larger RAM allocation, and Condor will need the CPU, RAM, and disk space (/var) to accommodate the needs of your users.
 
+
+### note on running playbooks...
+
+The ansible commands take paths to the group variables and inventory.  This may vary by system, so please interpolate your
+settings into the example commands below.  For example, here is the way the commands are run during a recent install:
+
+```
+ ansible-playbook -i /home/ansible/DE/ansible_vars/inventory -e @/home/ansible/DE/ansible_vars/group_var.yaml -s -K playbooks/java7.yaml --ssh-common-args='-o "StrictHostKeyChecking no"' -v
+
+
+```
+
+Be aware of various available flags, in this case the vms needed a host checking flag!  Be aware of available options as you 
+have to wrestle with proxies or other site-specific considerations
+
+
 ### Ansible Setup
 * Create a privileged Ansible user on all boxes, select a head node, generate ssh key, distribute public keys, grant sudo to Ansible user. Here's a good [reference](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2)
 * on ansible head node, create a de directory under the ansible home dir (this is just suggested).  Under this, 
