@@ -25,36 +25,6 @@ Doing this results in
 
 Data container work - this is not covered in this document.  
 
-### Docker and Local Docker Repo
-
-Configure (need to make this optional) a secure private docker repo, install docker, configure if need be for proxies
-
-* create the local copy of the ssl keypair on the ansible head node
-
-```
-
-mkdir /home/ansible/de/ansible-vars/localdata/dockercerts
-
-openssl genrsa -out server.key
-
-openssl req -new -x509 -key server.key -out server.crt -days 365
-
-```
-* update the docker.registry group vars, per the AnnotatedGroupVar example
-
-* run the combined docker playbook: **$ ansible-playbook -i inventory -e @group_vars -s -K docker.yaml**
-
-
-* install the data container by building and pushing to the private docker repo
-
-```
-docker images
-  936  docker tag 12239e411d9f xxx.renci.org:443/de-data
-  937  docker push xxx.renci.org:443/de-data
-
-```
- 
-
 ### Prerequisite Playbooks
 * install CentOS library prereqs: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/prereqs.yaml**
 * configure iptables: **$ ansible-playbook -i inventory -e @group_vars -s -K iptables.yaml**
@@ -90,9 +60,6 @@ docker images
   937  docker push xxx.renci.org:443/de-data
 
 ```
-
-
-
 
 ### Misc Prereqs
 
