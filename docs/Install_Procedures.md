@@ -67,7 +67,6 @@ openssl req -new -x509 -key server.key -out server.crt -days 365
 
 * run the combined docker playbook: **$ ansible-playbook -i inventory -e @group_vars -s -K docker.yaml**
 
-
 * install the data container by building and pushing to the private docker repo
 
 ```
