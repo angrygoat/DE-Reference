@@ -160,6 +160,60 @@ $ bin/gsh -registry -init
 $ /opt/grouper/api # gsh -registry -runsqlfile /opt/grouper/api/ddlScripts/grouperDdl_20160810_13_41_50_782.sql
 ```
 
+
+### Other Dependencies
+* install Condor: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/condor.yaml**
+
+### Setup databases (if doing this manually, otherwise, skip ahead to the data container)
+
+Note that Discovery Environment currently uses PostgresQL-9.4, which the above role should install. Try your luck with facepalm, but connectivity errors forced us to build it and run it at the command line. Locations for current database tarballs:
+
+```
+db_targz: https://everdene.iplantcollaborative.org/jenkins/job/databases-dev/lastSuccessfulBuild/artifact/databases/de-database-schema/database.tar.gz
+jexdb_targz: https://everdene.iplantcollaborative.org/jenkins/job/databases-dev/lastSuccessfulBuild/artifact/databases/jex-db/jex-db.tar.gz
+metadata_db_targz: https://everdene.iplantcollaborative.org/jenkins/job/databases-dev/lastSuccessfulBuild/artifact/databases/metadata/metadata-db.tar.gz
+notification_db_targz: https://everdene.iplantcollaborative.org/jenkins/job/databases-dev/lastSuccessfulBuild/artifact/databases/notification-db/notification-db.tar.gz
+```
+See also https://everdene.iplantcollaborative.org/jenkins/job/databases-dev/
+
+###Facepalm commands to run:
+
+Template for reference:
+```
+java -jar /tmp/facepalm-standalone.jar -m {{fmode}} {{db_version_flag|default('')}} -h {{curr_db_host}} -p {{curr_db_port}} -d {{curr_db_name}} -U {{curr_db_user}} -A {{curr_db_admin}} {{tgz_flag}}
+```
+
+de db
+```
+java -jar target/facepalm-standalone.jar -m  init -h dfc-test-vmlab3.edc.renci.org -p 5432 -d de -U de -A postgres -f database.tar.gz
+```
+
+jex db
+```
+java -jar target/facepalm-standalone.jar -m  init -h dfc-test-vmlab3.edc.renci.org -p 5432 -d jex -U jex_user -A postgres -f jex-db.tar.gz
+```
+
+metadata db
+```
+java -jar target/facepalm-standalone.jar -m  init -h dfc-test-vmlab3.edc.renci.org -p 5432 -d metadata -U metadata_db -A postgres -f metadata-db.tar.gz
+```
+
+notification db
+```
+java -jar target/facepalm-standalone.jar -m  init -h dfc-test-vmlab3.edc.renci.org -p 5432 -d notifications -U notification_user -A postgres -f notification-db.tar.gz
+```
+
+Note that the facepalm-standalone jar can be found as a file in the de releases, and is in a zip with the schema files that go with each release point.
+
+For use on machines where proxies are involved, there is now a --proxy-host and --proxy-port flag, as facepalm will try and load some jars from clojars.  For example:
+
+```
+java -jar facepalm-standalone.jar -m  init -h localhost -p 5432 -d de -U de -A postgres -f database.tar.gz --proxy-host gateway.example.org --proxy-port 8080
+
+```
+
+
+
 * Run the Sharkbait tool to initialize Grouper structures for DE
 
 This installs and configures Grouper.  Once Grouper is running, it needs to be initialized with some basic DE group structures,
@@ -224,61 +278,6 @@ Creating permission def:analysis-permission-def...
 Registering DE apps...
 "Elapsed time: 204.134627 msecs"
 
-
-```
-
-
-### Other Dependencies
-* install Condor: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/condor.yaml**
-
-### Setup databases (if doing this manually, otherwise, skip ahead to the data container)
-
-* install postgres: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/postgres.yaml**
-* create DBs: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/db-creator.yaml**
-
-Note that Discovery Environment currently uses PostgresQL-9.4, which the above role should install. Try your luck with facepalm, but connectivity errors forced us to build it and run it at the command line. Locations for current database tarballs:
-
-```
-db_targz: https://everdene.iplantcollaborative.org/jenkins/job/databases-dev/lastSuccessfulBuild/artifact/databases/de-database-schema/database.tar.gz
-jexdb_targz: https://everdene.iplantcollaborative.org/jenkins/job/databases-dev/lastSuccessfulBuild/artifact/databases/jex-db/jex-db.tar.gz
-metadata_db_targz: https://everdene.iplantcollaborative.org/jenkins/job/databases-dev/lastSuccessfulBuild/artifact/databases/metadata/metadata-db.tar.gz
-notification_db_targz: https://everdene.iplantcollaborative.org/jenkins/job/databases-dev/lastSuccessfulBuild/artifact/databases/notification-db/notification-db.tar.gz
-```
-See also https://everdene.iplantcollaborative.org/jenkins/job/databases-dev/
-
-###Facepalm commands to run:
-
-Template for reference:
-```
-java -jar /tmp/facepalm-standalone.jar -m {{fmode}} {{db_version_flag|default('')}} -h {{curr_db_host}} -p {{curr_db_port}} -d {{curr_db_name}} -U {{curr_db_user}} -A {{curr_db_admin}} {{tgz_flag}}
-```
-
-de db
-```
-java -jar target/facepalm-standalone.jar -m  init -h dfc-test-vmlab3.edc.renci.org -p 5432 -d de -U de -A postgres -f database.tar.gz
-```
-
-jex db
-```
-java -jar target/facepalm-standalone.jar -m  init -h dfc-test-vmlab3.edc.renci.org -p 5432 -d jex -U jex_user -A postgres -f jex-db.tar.gz
-```
-
-metadata db
-```
-java -jar target/facepalm-standalone.jar -m  init -h dfc-test-vmlab3.edc.renci.org -p 5432 -d metadata -U metadata_db -A postgres -f metadata-db.tar.gz
-```
-
-notification db
-```
-java -jar target/facepalm-standalone.jar -m  init -h dfc-test-vmlab3.edc.renci.org -p 5432 -d notifications -U notification_user -A postgres -f notification-db.tar.gz
-```
-
-Note that the facepalm-standalone jar can be found as a file in the de releases, and is in a zip with the schema files that go with each release point.
-
-For use on machines where proxies are involved, there is now a --proxy-host and --proxy-port flag, as facepalm will try and load some jars from clojars.  For example:
-
-```
-java -jar facepalm-standalone.jar -m  init -h localhost -p 5432 -d de -U de -A postgres -f database.tar.gz --proxy-host gateway.example.org --proxy-port 8080
 
 ```
 
