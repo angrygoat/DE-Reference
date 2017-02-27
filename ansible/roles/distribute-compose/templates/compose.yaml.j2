@@ -122,8 +122,6 @@ anon_files:
     - JAVA_TOOL_OPTIONS="-Xmx1G"
   ports:
     - "65001:60000"
-  log_driver: "syslog"
-  log_opt:
     syslog-tag: anon-files
   volumes_from:
     - config_anon_files
@@ -141,8 +139,6 @@ apps:
   ports:
     - "65002:60000"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: apps
   volumes_from:
     - iplant_data_apps
     - config_apps
@@ -158,8 +154,6 @@ clockwork:
   environment:
     - JAVA_TOOL_OPTIONS="-Xmx512M"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: clockwork
   volumes_from:
     - config_clockwork
   volumes:
@@ -172,8 +166,6 @@ clm:
   command: --mode monitor --config /etc/iplant/de/jexevents.properties
   restart: on-failure:3
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: condor-log-monitor
   volumes_from:
     - config_clm
   volumes:
@@ -191,8 +183,6 @@ data_info:
   ports:
     - "65014:60000"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: data-info
   volumes_from:
     - config_data_info
   volumes:
@@ -206,8 +196,6 @@ de_ui:
   expose:
     - "8080"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: ui
   volumes_from:
     - iplant_data_de_ui
     - config_de_ui
@@ -224,8 +212,6 @@ de_ui_nginx:
     - "80:80"
     - "443:443"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: de-ui-nginx
   volumes_from:
     - iplant_data_de_ui_nginx
     - config_de_ui_nginx
@@ -243,8 +229,6 @@ dewey:
   environment:
     - JAVA_TOOL_OPTIONS="-Xmx512M"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: dewey
   volumes_from:
     - config_dewey
   volumes:
@@ -259,8 +243,6 @@ exim_sender:
     - PRIMARY_HOST=iplantcollaborative.org
     - ALLOWED_HOSTS=*
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: exim-sender
   volumes:
     - /etc/localtime:/etc/localtime
     - /etc/timezone:/etc/timezone
@@ -273,8 +255,6 @@ info_typer:
   environment:
     - JAVA_TOOL_OPTIONS="-Xmx512M"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: info-typer
   volumes_from:
     - config_info_typer
   volumes:
@@ -289,8 +269,6 @@ infosquito:
   environment:
     - JAVA_TOOL_OPTIONS="-Xmx512M"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: infosquito
   volumes_from:
     - config_infosquito
   volumes:
@@ -307,8 +285,6 @@ iplant_email:
   ports:
     - "65003:60000"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: iplant-email
   volumes_from:
     - config_iplant_email
   volumes:
@@ -327,8 +303,6 @@ iplant_groups:
   ports:
     - "65004:60000"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: iplant-groups
   volumes_from:
     - config_iplant_groups
   volumes:
@@ -343,8 +317,6 @@ jex_events:
   ports:
     - "65005:60000"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: jexevents
   volumes_from:
     - config_jex_events
   volumes:
@@ -361,8 +333,6 @@ kifshare:
   ports:
     - "65006:60000"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: kifshare
   volumes_from:
     - config_kifshare
   volumes:
@@ -379,8 +349,6 @@ metadata:
   ports:
     - "65007:60000"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: metadata
   volumes_from:
     - config_metadata
   volumes:
@@ -395,8 +363,6 @@ monkey:
   environment:
     - JAVA_TOOL_OPTIONS="-Xmx512M"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: monkey
   volumes_from:
     - config_monkey
   volumes:
@@ -413,8 +379,6 @@ notification_agent:
   ports:
     - "65008:60000"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: notificationagent
   volumes_from:
     - config_notification_agent
   volumes:
@@ -431,8 +395,6 @@ saved_searches:
   ports:
     - "65009:60000"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: saved-searches
   volumes_from:
     - config_saved_searches
   volumes:
@@ -449,8 +411,6 @@ terrain:
   ports:
     - "65010:60000"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: terrain
   volumes_from:
     - iplant_data_terrain
     - config_terrain
@@ -468,8 +428,6 @@ tree_urls:
   ports:
     - "65011:60000"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: tree-urls
   volumes_from:
     - config_tree_urls
   volumes:
@@ -486,8 +444,6 @@ user_preferences:
   ports:
     - "65012:60000"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: user-preferences
   volumes_from:
     - config_user_preferences
   volumes:
@@ -504,8 +460,6 @@ user_sessions:
   ports:
     - "65013:60000"
   log_driver: "syslog"
-  log_opt:
-    syslog-tag: user-sessions
   volumes_from:
     - config_user_sessions
   volumes:

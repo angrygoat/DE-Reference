@@ -347,6 +347,7 @@ And example Docker build is available, send us a message! (TODO: add a gist with
 This is configured in your group vars under iplant_groups_docker_repo
 
 ### Deploy Discovery Environment
+* distribute compose data **$ ansible-playbook -i inventory -e @group_vars -s -K disribute-compose.yaml**
 * pull the trigger: **$ ansible-playbook -i inventory -e @group_vars -s -K deploy-all.yaml**
 
 ### Custom UI container
