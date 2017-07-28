@@ -1,0 +1,13 @@
+
+prereqs:
+   service_account: xdci-service
+
+amqp:
+  de:
+    name: irods-topic
+    type: topic
+    user: irods
+    password: PASSWORD
+  irods:
+    user: irods
+    password: PASSWORD

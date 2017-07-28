@@ -5,18 +5,34 @@
     - role: util-notify-chat
       msg: "Updating {{ inventory_hostname }} AMQP broker."
 
-    - role: rabbitmq
+    - role: infra-rabbitmq
       install: true
-      broker_port: "{{ amqp_broker.port }}"
-      mgmt_port: "{{ amqp_broker.mgmt_port }}"
-      admin_user: "{{ amqp_user }}"
-      admin_password: "{{ amqp_password }}"
+      broker_port: "{{ amqp.de.port }}"
+      mgmt_port: "{{ amqp.de.mgmt_port }}"
+      admin_user: "{{ amqp.de.user }}"
+      admin_password: "{{ amqp.de.password }}"
+
+    - role: util-notify-chat
+      msg: "Done updating {{ inventory_hostname }} AMQP broker."
+
+- hosts: irods-amqp-brokers
+  become: true
+  roles:
+    - role: util-notify-chat
+      msg: "Updating {{ inventory_hostname }} iRODS AMQP broker."
+
+    - role: infra-rabbitmq
+      install: true
+      broker_port: "{{ amqp.irods.port }}"
+      mgmt_port: "{{ amqp.irods.mgmt_port }}"
+      admin_user: "{{ amqp.irods.user }}"
+      admin_password: "{{ amqp.irods.password }}"
       exchanges:
         - name: "{{ amqp_irods_exchange }}"
           type: topic
 
-    - role: util-notify-chat 
-      msg: "Done updating {{ inventory_hostname }} AMQP broker."
+    - role: util-notify-chat
+      msg: "Done updating {{ inventory_hostname }} iRODS AMQP broker."
 
 - hosts: amqp-ds-bms
   become: true
@@ -24,10 +40,10 @@
     - role: util-notify-chat
       msg: "Updating {{ inventory_hostname }} AMQP BMS configuration"
 
-    - role: rabbitmq
-      mgmt_port: "{{ amqp_broker.mgmt_port }}"
-      admin_user: "{{ amqp_user }}"
-      admin_password: "{{ amqp_password }}"
+    - role: infra-rabbitmq
+      mgmt_port: "{{ amqp.irods.mgmt_port }}"
+      admin_user: "{{ amqp.irods.user }}"
+      admin_password: "{{ amqp.irods.password }}"
       enable_ldap_with:
         servers: '["{{ ldap.host }}"]'
         user_dn_pattern: '"{{ ldap.dn_lookup.attribute }}=${username},{{ ldap.dn_lookup.base }}"'
@@ -77,7 +93,6 @@
           exchange: "{{ ds_bms.amqp.reg_queue }}"
           routing_key: "{{ ds_bms.amqp.reg_queue }}"
           max_length: 1000
-         
-    - role: util-notify-chat 
-      msg: "Done updating {{ inventory_hostname }} AMQP BMS configuration"
 
+    - role: util-notify-chat
+      msg: "Done updating {{ inventory_hostname }} AMQP BMS configuration"
