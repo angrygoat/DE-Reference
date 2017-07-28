@@ -26,8 +26,7 @@
           - yaml
 
     - name: 'dump variables'
-      setup:
-         filter: *
+      debug: var=vars
 
 - include: "{{playbook}}"
 
