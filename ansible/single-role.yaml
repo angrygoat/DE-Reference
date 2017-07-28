@@ -20,10 +20,10 @@
   tasks:
     - name: 'include variables'
       include_vars:
-        dir: '{{template_groupvar}}'
+        dir: "{{template_groupvar}}"
         extensions:
           - yml
           - yaml
-          
+
 - include: "{{playbook}}"
 
