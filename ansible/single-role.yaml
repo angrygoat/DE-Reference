@@ -25,5 +25,9 @@
           - yml
           - yaml
 
+    - name: 'dump variables'
+      setup:
+         filter: *
+
 - include: "{{playbook}}"
 
