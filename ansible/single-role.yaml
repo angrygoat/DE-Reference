@@ -16,5 +16,13 @@
 # [1] http://docs.ansible.com/ansible/playbooks_best_practices.html
 ---
 
+- name: Include all .yml files in vars/all and all nested directories (2.3)
+  include_vars:
+    dir: 'vars/all'
+    extensions:
+        - yml
+        - yaml
+
+
 - include: "{{playbook}}"
 
