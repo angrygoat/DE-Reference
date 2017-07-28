@@ -1,6 +1,8 @@
 ---
 
-postgresql_version: 9.4
+postgresql_version: 9.6
+postgresql_cmd: /usr/pgsql-9.6/bin/postgresql96-setup
+postgresql_repo_rpm: https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-3.noarch.rpm
 
 # This will be the main admin user, which is only allowed to connect
 # from localhost, mainly for provisioning, maintenance and scripts.

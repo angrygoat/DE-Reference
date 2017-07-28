@@ -53,7 +53,7 @@
   yum: name={{item}} state=latest
   with_items:
     - libpqxx-devel
-    - postgresql94-contrib
+    - postgresql96-contrib
     - postgis
   when: ansible_distribution == "CentOS" and
         ansible_distribution_major_version == "7"
