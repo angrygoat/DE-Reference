@@ -18,7 +18,7 @@
 
 - name: Include all .yml files in vars/all and all nested directories (2.3)
   include_vars:
-    dir: 'vars/all'
+    dir: '{{template_groupvar}}'
     extensions:
         - yml
         - yaml

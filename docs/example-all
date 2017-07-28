@@ -1,3 +1,5 @@
+# location of the templated group vars that we then overlay with our specified overrides
+template_groupvar: /home/ansible/ansible/inventories/group_vars/all
 
 prereqs:
    service_account: xdci-service
