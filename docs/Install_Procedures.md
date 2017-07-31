@@ -43,8 +43,7 @@ Data container work - this is not covered in this document.
 
 ### Prerequisite Playbooks
 * install CentOS library prereqs: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/prereqs.yaml**
-* configure iptables: **$ ansible-playbook -i inventory -e @group_vars -s -K iptables.yaml**
-
+### taken out - mcc * configure iptables: **$ ansible-playbook -i inventory -e @group_vars -s -K iptables.yaml**
 
 Data container work - this is not covered in this document.  
 

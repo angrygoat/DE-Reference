@@ -1,5 +1,0 @@
----
-- name: create the docker network for the de
-  sudo: true
-  ignore_errors: yes
-  shell: docker network create --driver bridge de-{{environment_name}}
