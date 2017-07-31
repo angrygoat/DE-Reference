@@ -1,10 +1,11 @@
 FROM nvidia/cuda:8.0-devel-ubuntu16.04
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-         cuda-samples-7.5 && \
+         cuda-samples-8.0 && \
      rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/local/cuda/samples/1_Utilities/deviceQuery
 RUN make
 
-CMD deviceQuery
+#CMD ./deviceQuery
+CMD yes

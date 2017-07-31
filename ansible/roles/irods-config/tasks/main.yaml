@@ -10,7 +10,7 @@
     - core.re
     - ipc-amqp.re
     - ipc-custom.re
-    - ipc-json.re
+    - ipc-json.reles
     - ipc-logic.re
     - ipc-uuid.re
 

@@ -351,3 +351,5 @@ This is configured in your group vars under iplant_groups_docker_repo
 
 ### Custom UI container
 * note that the UI container must container appropriate PKCS/javastore keys to talk to CAS/LDAP. This will require a custom UI container per installation, determined by the group_var de.docker_repository:
+
+Note that the cas cert is typically in /ansible_vars/localdata/cascerts as server.crt
