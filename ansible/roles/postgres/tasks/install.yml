@@ -41,7 +41,7 @@
   ignore_errors: true
 
 - name: restart and enable postgres for CentOS7
-  service: name={{ postgresql_version }} enabled=yes state=restarted
+  service: name="postgresql-{{ postgresql_version }}" enabled=yes state=restarted
   when: ansible_distribution == "CentOS" and
         ansible_distribution_major_version == "7"
  
