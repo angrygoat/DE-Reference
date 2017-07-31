@@ -80,7 +80,7 @@ docker images
 
 * install openJDK7 on services VM: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/java7.yaml**
 * install timezone packages: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/timezone.yaml**
-* install amqp: **$ ansible-playbook -i inventory -e @group_vars -s -K playbooks/amqp-brokers.yaml**
+* install amqp: **$ ansible-playbook -i inventory -e @group_vars -s -K infra-amqp-brokers.yaml**
 
 
 ### Setup databases (if doing this manually, otherwise, skip ahead to the data container)
