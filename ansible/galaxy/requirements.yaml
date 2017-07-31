@@ -1,16 +1,10 @@
-# set some reqirements for external ansible galaxy stuff
 ---
-# Temporarily use iPlant's fork
-#- src: gpstathis.elasticsearch
-- src: https://github.com/DICE-UNC/ansible-elasticsearch
-  name: gpstathis.elasticsearch
+- src: jtyr.rabitmq    # The typo appears to be intentional
+  name: jtyr.rabbitmq
 
-# Temporarily use iPlant's fork
-#- src: Rackspace_Automation.epel
-- src: https://github.com/DICE-UNC/epel.git
-  name: Rackspace_Automation.epel
-
-# Temporarily use iPlant's fork
-#- src: Rackspace_Automation.rabbitmq
-- src: https://github.com/iPlantCollaborativeOpenSource/rabbitmq
-  name: Rackspace_Automation.rabbitmq
+- src: CyVerse-Ansible.miscvars
+  name: CyVerse-Ansible.miscvars
+  
+- src: CyVerse-Ansible.elasticsearch
+  name: elastic.elasticsearch
+  version: v5.4.0
