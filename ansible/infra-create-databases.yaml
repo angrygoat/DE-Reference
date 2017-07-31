@@ -4,8 +4,9 @@
       - role: infra-db-creator
         standard_conforming_strings: "{{ not (inventory_hostname in groups['icat']) }}"
 
-  pre_tasks:
-      - pause: prompt="Is postgress installed? And did you set the admin password?"
+# the role executes the installation pre-req.
+#  pre_tasks:
+#      - pause: prompt="Is postgress installed? And did you set the admin password?"
 
 - hosts: db-proxy
   roles:
