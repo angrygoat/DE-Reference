@@ -1,0 +1,35 @@
+---
+- hosts: db
+  roles:
+      - role: infra-db-creator
+        standard_conforming_strings: "{{ not (inventory_hostname in groups['icat']) }}"
+
+# the role executes the installation pre-req.
+#  pre_tasks:
+#      - pause: prompt="Is postgress installed? And did you set the admin password?"
+
+- hosts: db-proxy
+  roles:
+      - de-services-common
+
+      - role: util-notify-chat
+        msg: "Initializing databases"
+
+      - role: de-update-database-de
+        become: false
+        fmode: "init"
+
+      - role: de-update-database-jex
+        become: false
+        fmode: "init"
+
+      - role: de-update-database-metadata
+        become: false
+        fmode: "init"
+
+      - role: de-update-database-notifications
+        become: false
+        fmode: "init"
+
+      - role: util-notify-chat
+        msg: "Done initializing databases"
