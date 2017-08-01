@@ -1,0 +1,80 @@
+##  What machine is your central manager?
+
+CONDOR_HOST = {{ condor.host }}
+
+{% if 'condor-master' in group_names %}
+COLLECTOR_NAME = Condor pool for {{environment_name}}
+NEGOTIATOR_INTERVAL = 20
+{% endif %}
+
+SUSPEND = FALSE
+
+PREEMPT = FALSE
+
+KILL = FALSE
+
+IS_OWNER = FALSE
+
+##  This macro determines what daemons the condor_master will start and keep its watchful eyes on.
+##  The list is a comma or space separated list of subsystem names
+
+DAEMON_LIST = MASTER{% if 'condor-master' in group_names %}, COLLECTOR, NEGOTIATOR{% endif %}{% if 'condor-submission' in group_names %}, SCHEDD{% endif %}{% if 'condor' in group_names %}, STARTD{% endif %}
+
+TRUST_UID_DOMAIN = TRUE
+
+#################################
+## Added for iPlant Collaborative
+#################################
+CONDOR_ADMIN    = {{ condor.admin }}
+UID_DOMAIN      = {{ condor.uid_domain }}
+FILESYSTEM_DOMAIN = {{ condor.filesystem_domain }}
+ALLOW_READ      = {{ condor.allow_read }}
+ALLOW_WRITE     = {{ condor.allow_write }}
+
+HIGHPORT        = 65535
+LOWPORT         = 61440
+JAVA            = /usr/bin/java
+USE_SHARED_PORT = TRUE
+SHARED_PORT_ARGS = -p 9618
+
+{% if use_ccb %}
+CCB_ADDRESS = $(COLLECTOR_HOST)
+{% endif %}
+
+{% if private_network %}
+PRIVATE_NETWORK_NAME = {{ private_network }}
+{% endif %}
+
+SEC_PASSWORD_FILE = $(LOCAL_DIR)/lib/condor/pool_password
+SEC_DAEMON_AUTHENTICATION = REQUIRED
+SEC_DAEMON_INTEGRITY = REQUIRED
+SEC_DAEMON_AUTHENTICATION_METHODS = PASSWORD
+SEC_DAEMON_ENCRYPTION = REQUIRED
+SEC_NEGOTIATOR_AUTHENTICATION = REQUIRED
+SEC_NEGOTIATOR_INTEGRITY = REQUIRED
+SEC_NEGOTIATOR_AUTHENTICATION_METHODS = PASSWORD
+SEC_CLIENT_AUTHENTICATION_METHODS = FS, PASSWORD
+ALLOW_DAEMON = condor_pool@$(UID_DOMAIN)/*
+ALLOW_NEGOTIATOR = condor_pool@$(UID_DOMAIN)/{{condor.host}}
+
+{% if is_jetstream %}
+TCP_FORWARDING_HOST = {{ inventory_hostname }}
+
+IS_JETSTREAM = True
+STARTD_ATTRS = $(STARTD_ATTRS) IS_JETSTREAM
+{% endif %}
+
+{% if has_host_mounts %}
+HAS_HOST_MOUNTS = True
+STARTD_ATTRS = $(STARTD_ATTRS) HAS_HOST_MOUNTS
+{% endif %}
+
+{% if num_slots %}
+NUM_SLOTS = {{ num_slots }}
+{% endif %}
+
+START = {{ start_condition }}
+
+{% if execute_dir %}
+EXECUTE = {{ execute_dir }}
+{% endif %}

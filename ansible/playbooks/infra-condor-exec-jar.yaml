@@ -1,0 +1,8 @@
+---
+- name: Ensure self-executing jars will run on Condor nodes
+  hosts: condor
+  become: true
+  tags:
+      - condor
+  roles:
+      - infra-condor-exec-jar
