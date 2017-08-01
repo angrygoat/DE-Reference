@@ -64,7 +64,10 @@ openssl req -new -x509 -key server.key -out server.crt -days 365
 ```
 * update the docker.registry group vars, per the AnnotatedGroupVar example
 
-* run the combined docker playbook: **$ ansible-playbook -i inventory -e @group_vars -s -K docker.yaml**
+* run the  docker playbook: **$ ansible-playbook -i inventory -e @group_vars -s -K docker.yaml**
+
+* run the combined docker registry playbook: **$ ansible-playbook -i inventory -e @group_vars -s -K docker-registry.yaml**
+
 
 * install the data container by building and pushing to the private docker repo
 
