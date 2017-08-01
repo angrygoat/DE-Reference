@@ -1,0 +1,67 @@
+###
+# The general data container for nginx.
+###
+iplant_data_{{ grouper.http_server.compose_service }}:
+  image: "{{ docker.registry.base }}/{{ data_container.image_name }}:latest"
+  container_name: iplant-data-grouper
+
+###
+# The configuration containers.
+###
+config_{{ grouper.compose_service }}:
+  image: "{{ docker.registry.base }}/grouper-configs-{{ ansible_hostname }}:{{ docker.tag }}"
+  container_name: config-grouper
+
+config_{{ grouper.http_server.compose_service }}:
+  image: "{{ docker.registry.base }}/grouper-configs-{{ ansible_hostname }}:{{ docker.tag }}"
+  container_name: config-nginx
+
+###
+# Service definitions
+###
+{{ grouper.compose_service }}:
+  image: {{ grouper.image_repo }}
+  container_name: {{ grouper.container_name }}
+  restart: "unless-stopped"
+  ports:
+    - "8080:8080"
+  log_driver: "syslog"
+  log_opt:
+    tag: "{{ '{{' }}.ImageName{{ '}}' }}/{{ '{{' }}.Name{{ '}}' }}"
+  volumes_from:
+    - config_grouper
+  volumes:
+    - "/etc/localtime:/etc/localtime"
+    - "/etc/timezone:/etc/timezone"
+
+{{ grouper.loader.compose_service }}:
+  image: {{ grouper.image_repo }}
+  container_name: {{ grouper.loader.container_name }}
+  entrypoint: "sh"
+  command: [ "/opt/grouper/api/bin/gsh", "-loader" ]
+  restart: "unless-stopped"
+  log_driver: "syslog"
+  log_opt:
+    tag: "{{ '{{' }}.ImageName{{ '}}' }}/{{ '{{' }}.Name{{ '}}' }}"
+  volumes_from:
+    - config_grouper
+  volumes:
+    - "/etc/localtime:/etc/localtime"
+    - "/etc/timezone:/etc/timezone"
+
+{{ grouper.http_server.compose_service }}:
+  image: {{ grouper.http_server.image_repo }}
+  container_name: {{ grouper.http_server.container_name }}
+  restart: "unless-stopped"
+  ports:
+    - "80:80"
+    - "443:443"
+  log_driver: "syslog"
+  log_opt:
+    tag: "{{ '{{' }}.ImageName{{ '}}' }}/{{ '{{' }}.Name{{ '}}' }}"
+  volumes_from:
+    - config_grouper_nginx
+    - iplant_data_grouper_nginx
+  volumes:
+    - "/etc/localtime:/etc/localtime"
+    - "/etc/timezone:/etc/timezone"
