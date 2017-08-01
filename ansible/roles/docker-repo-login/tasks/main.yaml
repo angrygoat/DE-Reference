@@ -3,17 +3,31 @@
 #  yum: name=docker-python state=latest
 #  tags: docker
 
-- name: install docker-py
+#- name: install docker-py
+#  sudo: yes
+#  pip:
+#    name: "{{ item }}"
+#    state: present
+#  with_items:
+#    - docker-py>=1.2.3
+#    - six>=1.4.0
+#  tags: docker
+  #pip: name=docker-py version=1.1.0 state=present
+
+- name: uninstall docker-py
+  sudo: yes
+  pip:
+    name: "{{ item }}"
+    state: absent
+#  with_items:
+#    - docker-py>=1.2.3
+#    - six>=1.4.0
+#  tags: docker
+- name: pip install docker
   sudo: yes
   pip:
     name: "{{ item }}"
     state: present
-  with_items:
-    - docker-py>=1.2.3
-    - six>=1.4.0
-  tags: docker
-  #pip: name=docker-py version=1.1.0 state=present
-
 
 - name: create a dir for the self signed certificate
   sudo: yes
