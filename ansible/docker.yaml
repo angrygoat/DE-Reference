@@ -2,5 +2,3 @@
 # full playbook to install docker, configure a local docker registry, and have each docker ready server logged in to that
 # private repo
 - include: playbooks/infra-docker.yaml
-
-

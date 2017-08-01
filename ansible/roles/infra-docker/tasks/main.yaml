@@ -76,6 +76,10 @@
         shell: yum versionlock delete 0:docker-engine*
         ignore_errors: true
 
+      - name: print docker.locked_version
+        debug:
+          msg: "docker.locked_version is {{ docker.locked_version }}"
+
       - name: lock docker-ce version
         shell: |
             yum versionlock delete 0:docker-ce*
@@ -117,7 +121,7 @@
 
     - name: Install Docker selinux package
       yum:
-        name: "{{ docker.selinux_version }}"
+        name: docker-ce-selinux
         enablerepo: docker-ce
         state: present
         update_cache: yes
@@ -125,7 +129,7 @@
     - name: Install Docker package
       yum:
         # old version of this line was 'name: "docker-ce{{docker_version_string}}"'
-        name:  "{{ docker.version }}"
+        name:  docker-ce
         enablerepo: docker-ce
         state: present
         update_cache: yes
