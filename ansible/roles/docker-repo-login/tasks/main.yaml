@@ -17,7 +17,7 @@
 - name: uninstall docker-py
   sudo: yes
   pip:
-    name: "{{ item }}"
+    name: docker-py
     state: absent
 #  with_items:
 #    - docker-py>=1.2.3
@@ -26,7 +26,7 @@
 - name: pip install docker
   sudo: yes
   pip:
-    name: "{{ item }}"
+    name: docker
     state: present
 
 - name: create a dir for the self signed certificate
