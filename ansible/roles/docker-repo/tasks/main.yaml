@@ -1,11 +1,6 @@
 # mccrole to install docker private registry, requires docker to be installed and configured
 # https://docs.docker.com/registry/deploying/
 
-- name: install docker-engine
-  yum: name=docker-engine state=latest
-  tags:
-      - docker-registry
-
 - name: create an etc dir for the docker registry
   sudo: yes
   file: path={{ docker_registry.target_config_dir }} state=directory mode=0700
