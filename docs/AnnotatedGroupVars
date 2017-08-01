@@ -386,7 +386,7 @@ docker:
   user: discoenv
   version: 1.11.0
   compose_path: /etc/compose.yaml
-  registry:
+  docker_registry:
     host: "{{ groups['docker-registry'][0] }}"
     port: 443
     base: "CHANGEME"

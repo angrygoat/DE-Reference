@@ -112,7 +112,7 @@ max_connections = 200			# (change requires restart)
 # - Memory -
 
 #shared_buffers = 32MB			# min 128kB
-shared_buffers = {{ ansible_memtotal_mb // 4 }}MB  # Set to 25% of installed RAM - iPlant
+shared_buffers = 1024MB  # Set to 25% of installed RAM - iPlant
 					# (change requires restart)
 #temp_buffers = 8MB			# min 800kB
 #max_prepared_transactions = 0		# zero disables the feature
@@ -266,7 +266,7 @@ shared_buffers = {{ ansible_memtotal_mb // 4 }}MB  # Set to 25% of installed RAM
 #cpu_index_tuple_cost = 0.005		# same scale as above
 #cpu_operator_cost = 0.0025		# same scale as above
 #effective_cache_size = 128MB
-effective_cache_size = {{ ansible_totalmem_mb // 2 }}  # Set to 50% of installed RAM - iPlant
+effective_cache_size = 2048MB # Set to 50% of installed RAM - iPlant
 
 # - Genetic Query Optimizer -
 

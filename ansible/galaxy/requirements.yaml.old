@@ -1,0 +1,16 @@
+# set some reqirements for external ansible galaxy stuff
+---
+# Temporarily use iPlant's fork
+#- src: gpstathis.elasticsearch
+- src: https://github.com/DICE-UNC/ansible-elasticsearch
+  name: gpstathis.elasticsearch
+
+# Temporarily use iPlant's fork
+#- src: Rackspace_Automation.epel
+- src: https://github.com/DICE-UNC/epel.git
+  name: Rackspace_Automation.epel
+
+# Temporarily use iPlant's fork
+#- src: Rackspace_Automation.rabbitmq
+- src: https://github.com/iPlantCollaborativeOpenSource/rabbitmq
+  name: Rackspace_Automation.rabbitmq

@@ -1,19 +1,19 @@
 ---
 - name: postgresql-server is installed via yum
   become: true
-  yum: name=postgresql95-server state=present
+  yum: name=postgresql96-server state=present
   when: ansible_distribution == "CentOS"
   register: centos_server_install
 
 - name: postgresl-contrib is installed via yum
   become: true
-  yum: name=postgresql95-contrib state=present
+  yum: name=postgresql96-contrib state=present
   when: ansible_distribution == "CentOS"
 
 - name: post install -- init postgres
   become: true
   when: centos_server_install|changed
-  command: service postgresql-9.5 initdb
+  command: /usr/pgsql-9.6/bin/postgresql96-setup initdb
   register: postgresql_init
 
 - name: place postgresql.conf
@@ -21,7 +21,7 @@
   when: ansible_distribution == "CentOS"
   template: 
     src: postgresql.conf.j2  
-    dest: /var/lib/pgsql/9.5/data/postgresql.conf 
+    dest: /var/lib/pgsql/9.6/data/postgresql.conf 
     owner: postgres 
     group: postgres 
     mode: 0600 
@@ -31,26 +31,26 @@
 - name: restart postgres after init or config change
   become: true
   when: (postgresql_init|changed or conf|changed) and ansible_distribution == "CentOS"
-  service: name=postgresql-9.5 state=restarted
+  service: name=postgresql-9.6 state=restarted
 
 - name: post install -- set admin user's password
   become: true
-  sudo_user: postgres
+  become_user: postgres
   when: postgresql_init|changed and ansible_distribution == "CentOS"
   postgresql_user: name={{db_admin}} password={{db_admin_password}} state=present login_user=postgres role_attr_flags=SUPERUSER
 
 - name: place pg_hba.conf
   become: true
   when: ansible_distribution == "CentOS"
-  template: src=pg_hba.conf.j2 dest=/var/lib/pgsql/9.2/data/pg_hba.conf owner=postgres group=postgres mode=0600 backup=yes
+  template: src=pg_hba.conf.j2 dest=/var/lib/pgsql/9.6/data/pg_hba.conf owner=postgres group=postgres mode=0600 backup=yes
   register: pg_hba
 
 - name: restart postgres after pg_hba changed
   become: true
   when: pg_hba|changed and ansible_distribution == "CentOS"
-  service: name=postgresql-9.5 state=restarted
+  service: name=postgresql-9.6 state=restarted
 
 - name: post install -- ensure postgresql starts on reboot
   become: true
   when: centos_server_install|changed
-  command: chkconfig postgresql-9.5 on
+  command: chkconfig postgresql-9.6 on

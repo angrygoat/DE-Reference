@@ -1,14 +1,9 @@
 # mccrole to install docker private registry, requires docker to be installed and configured
 # https://docs.docker.com/registry/deploying/
 
-- name: install docker-engine
-  yum: name=docker-engine state=latest
-  tags:
-      - docker-registry
-
 - name: create an etc dir for the docker registry
   sudo: yes
-  file: path={{ docker.registry.target_config_dir }} state=directory mode=0700
+  file: path={{ docker_registry.target_config_dir }} state=directory mode=0700
   tags:
       - docker-registry
 
@@ -21,30 +16,20 @@
 # need to add when_install_certs flag
 - name: copy cert public key into etc
   sudo: yes
-  copy: src={{ docker.registry.cert_dir }}{{docker.registry.public_key}} dest={{ docker.registry.target_config_dir }}{{docker.registry.public_key}} owner=root group=root mode=0644
+  copy: src={{ docker_registry.cert_dir }}{{docker_registry.public_key}} dest={{ docker_registry.target_config_dir }}{{docker_registry.public_key}} owner=root group=root mode=0644
   tags:
         - docker-registry
 #
 - name: copy cert private key into etc
   sudo: yes
-  copy: src={{ docker.registry.cert_dir }}{{docker.registry.private_key}} dest={{ docker.registry.target_config_dir }}{{docker.registry.private_key}} owner=root group=root mode=0644
+  copy: src={{ docker_registry.cert_dir }}{{docker_registry.private_key}} dest={{ docker_registry.target_config_dir }}{{docker_registry.private_key}} owner=root group=root mode=0644
   tags:
         - docker-registry
 
 - name: add docker registry user/passwd
-  shell: docker run --entrypoint htpasswd registry:2 -Bbn {{ docker.registry.user }} {{ docker.registry.pass }} > {{docker_repo_auth_path}}/htpasswd
+  shell: docker run --entrypoint htpasswd registry:2 -Bbn {{ docker_registry.user }} {{ docker_registry.pass }} > {{docker_repo_auth_path}}/htpasswd
   tags:
        - docker-registry
-
-#- name: make a directory on all docker boxes for cert
-#  file: path=/etc/docker/certs.d/myregistrydomain.com:5000/ state=directory state=directory mode=0755
-#  tags:
-#       - docker-registry
-
-#- name: copy docker registry public key to cert
-#  copy: src={{ docker.registry.cert_dir }}/{{ docker.registry.public_key }} dest=/etc/docker/certs.d/myregistrydomain.com:{{docker.registry.port}}/ owner=root group=root mode=0744
-#  tags:
-#        - docker-registry
 
 - name: place Systemd service files
   template: src=docker-repo.service.j2 dest=/usr/lib/systemd/system/docker-repo.service group=root owner=root mode=0664
