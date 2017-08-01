@@ -30,9 +30,10 @@ timezone: America/New_York
 use_overlay: true
 docker.version: 17.06
 # source dir for docker certs to be copied into docker repo
-docker_registry.cert_dir: /home/ansible/de/ansible-vars/localdata/dockercerts/
-docker_registry.user: dockerreg
-docker_registry.pass: PASSWORD
+docker_registry:
+    cert_dir: /home/ansible/de/ansible-vars/localdata/dockercerts/
+    user: dockerreg
+    pass: PASSWORD
 
 # MISC DE-Ref vars
 proxy_env.https_proxy:
