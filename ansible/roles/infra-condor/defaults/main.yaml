@@ -1,0 +1,7 @@
+---
+is_jetstream:    true
+has_host_mounts: false
+use_ccb:         false
+start_condition: "TRUE"
+execute_dir:     "{% if is_jetstream %}/vol1/execute{% endif %}"
+condor_password: "{% if condor is defined %}{{ condor.get('password', '') }}{% endif %}"

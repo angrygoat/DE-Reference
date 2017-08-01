@@ -1,0 +1,6 @@
+---
+- name: place the docker compose file.
+  become: yes
+  template: src=docker-compose.yml.j2 dest={{ docker.compose_path }} owner=root group=root mode=0644
+  tags:
+    - docker-compose

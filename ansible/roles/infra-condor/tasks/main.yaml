@@ -1,0 +1,66 @@
+---
+# Uninstall old packages
+- block:
+     - name: Uninstall previous Condor package
+       package:
+          name:  condor
+          state: absent
+  rescue:
+      - fail: msg="Error when removing old condor package"
+  tags:
+      - uninstall
+
+# Install repos and new packages
+- block:
+     - when: ansible_distribution == "CentOS" and
+             ansible_distribution_major_version == "7"
+       include: CentOS-7_install.yaml
+
+     - when: ansible_os_family == 'Debian'
+       include: Debian_install.yaml
+  tags:
+      - install
+
+
+- name: ensure that /etc/condor exists
+  file: path=/etc/condor state=directory mode=0755
+  tags:
+    - config
+
+- name: ensure that /opt/image-janitor exists and is owned by condor
+  file: path=/opt/image-janitor state=directory mode=0755 owner=condor group=condor
+  tags:
+    - config
+
+- name: ensure execute dir exists and is owned by condor
+  file: path={{execute_dir}} state=directory mode=0755 owner=condor group=condor
+  tags:
+    - config
+
+- name: place the local config file
+  become: yes
+  template: src=condor_config.local.j2 dest=/etc/condor/condor_config.local owner=root group=root mode=0644
+  tags:
+    - config
+
+- name: set the condor password
+  become: yes
+  command: condor_store_cred -f /var/lib/condor/pool_password -p {{condor_password | quote}}
+  tags:
+    - config
+  when: condor_password != ""
+
+- name: enable condor
+  service:
+     name: condor
+     enabled: yes
+  tags:
+      - enable_condor
+
+- name: restart condor
+  service:
+     name: condor
+     state: restarted
+     enabled: yes
+  tags:
+      - restart_condor

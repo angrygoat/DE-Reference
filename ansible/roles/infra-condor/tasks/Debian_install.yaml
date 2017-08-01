@@ -1,0 +1,2 @@
+---
+- pause: prompt="Condor installation to Debian systems not supported by this role. For this host, please install manually. https://research.cs.wisc.edu/htcondor/instructions/debian/8/stable/"

@@ -1,0 +1,35 @@
+---
+- stat: path=/etc/yum.repos.d/htcondor-stable-rhel7.repo
+  register: condor_repo_st
+  tags:
+     - always
+
+- when: condor_repo_st is defined and condor_repo_st.isreg
+  block:
+      - name: Remove older condor repo file
+        file:
+           path:  "{{condor_repo_st.path}}"
+           state: absent
+  rescue:
+      - debug: var=condor_repo_st
+      - fail: msg="Error when removing old condor repo"
+  tags:
+      - uninstall
+
+- name: Add repo file
+  yum_repository:
+     name:        htcondor-stable
+     description: "HTCondor Stable RPM Repository for Redhat Enterprise Linux 7"
+     baseurl:     "http://research.cs.wisc.edu/htcondor/yum/stable/rhel7"
+     enabled:     yes
+     gpgcheck:    yes
+     gpgkey:      http://research.cs.wisc.edu/htcondor/yum/RPM-GPG-KEY-HTCondor
+  tags:
+      - install
+
+- name: Install Condor package
+  package:
+     name:  "condor-all"
+     state: present
+  tags:
+      - install
