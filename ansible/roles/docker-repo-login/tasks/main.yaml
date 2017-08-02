@@ -23,11 +23,20 @@
 #    - docker-py>=1.2.3
 #    - six>=1.4.0
 #  tags: docker
+
+- name: uninstall docker
+  sudo: yes
+  pip:
+    name: docker
+    state: absent
+  tags: docker
+
 - name: pip install docker
   sudo: yes
   pip:
     name: docker
     state: present
+  tags: docker
 
 - name: create a dir for the self signed certificate
   sudo: yes
