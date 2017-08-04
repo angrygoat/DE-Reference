@@ -1,0 +1,5 @@
+- hosts: cas
+  sudo: yes
+  sudo_user: root
+  roles:
+   - role: ldap

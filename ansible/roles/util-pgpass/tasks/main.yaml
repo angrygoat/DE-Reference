@@ -1,4 +1,0 @@
----
-- name: place .pgpass
-  become: yes
-  template: src=postgres.pgpass.j2 dest=~root/.pgpass mode=0600 backup=yes

@@ -41,9 +41,7 @@ SHARED_PORT_ARGS = -p 9618
 CCB_ADDRESS = $(COLLECTOR_HOST)
 {% endif %}
 
-{% if private_network %}
-PRIVATE_NETWORK_NAME = {{ private_network }}
-{% endif %}
+# we're already on a private network
 
 SEC_PASSWORD_FILE = $(LOCAL_DIR)/lib/condor/pool_password
 SEC_DAEMON_AUTHENTICATION = REQUIRED
@@ -69,9 +67,7 @@ HAS_HOST_MOUNTS = True
 STARTD_ATTRS = $(STARTD_ATTRS) HAS_HOST_MOUNTS
 {% endif %}
 
-{% if num_slots %}
-NUM_SLOTS = {{ num_slots }}
-{% endif %}
+# let's let condor automatically set NUM_SLOTS
 
 START = {{ start_condition }}
 

@@ -1,5 +1,0 @@
----
-allow_duplicates: yes
-dependencies:
-    - util-pgpass
-    - de-facepalm
