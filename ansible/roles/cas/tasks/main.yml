@@ -3,7 +3,7 @@
 # Properties file configuration
 #
 - name: ensure data directory exists
-  file: path=/etc/cas state=directory owner={{ cas.tomcat_user }} group={{ cas.tomcat_group }}
+  file: path=/etc/cas state=directory owner={{ cas_tomcat_user }} group={{ cas_tomcat_group }}
   tags:
     - cas
     - properties
@@ -15,13 +15,13 @@
     - properties
 
 - name: copy log4j.xml
-  copy: src=log4j.xml dest=/etc/cas/ owner={{ cas.tomcat_user }} group={{ cas.tomcat_group }}
+  copy: src=log4j.xml dest=/etc/cas/ owner={{ cas_tomcat_user }} group={{ cas_tomcat_group }}
   tags:
     - cas
     - properties
 
 - name: set data ownership [all data is owned by tomcat]
-  file: path=/etc/cas owner={{ cas.tomcat_user }} group={{ cas.tomcat_group }} recurse=true
+  file: path=/etc/cas owner={{ cas_tomcat_user }} group={{ cas_tomcat_group }} recurse=true
   tags:
     - cas
     - properties
