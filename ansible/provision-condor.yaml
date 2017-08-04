@@ -1,8 +1,0 @@
----
-
-- name: install condor
-  sudo: yes
-  hosts: htcondor
-  roles:
-    - condor
-    - condor-submitter
