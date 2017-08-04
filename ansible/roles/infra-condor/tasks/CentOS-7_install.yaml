@@ -1,20 +1,21 @@
 ---
-- stat: path=/etc/yum.repos.d/htcondor-stable-rhel7.repo
-  register: condor_repo_st
-  tags:
-     - always
-
-- when: condor_repo_st is defined and condor_repo_st.isreg
-  block:
-      - name: Remove older condor repo file
-        file:
-           path:  "{{condor_repo_st.path}}"
-           state: absent
-  rescue:
-      - debug: var=condor_repo_st
-      - fail: msg="Error when removing old condor repo"
-  tags:
-      - uninstall
+# these die and we don't need them anyway
+#- stat: path=/etc/yum.repos.d/htcondor-stable-rhel7.repo
+#  register: condor_repo_st
+#  tags:
+#     - always
+#
+#- when: condor_repo_st is defined and condor_repo_st.isreg
+#  block:
+#      - name: Remove older condor repo file
+#        file:
+#           path:  "{{condor_repo_st.path}}"
+#           state: absent
+#  rescue:
+#      - debug: var=condor_repo_st
+#      - fail: msg="Error when removing old condor repo"
+#  tags:
+#      - uninstall
 
 - name: Add repo file
   yum_repository:
