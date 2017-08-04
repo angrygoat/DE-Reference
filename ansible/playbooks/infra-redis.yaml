@@ -1,0 +1,5 @@
+---
+- name: Install and configure Redis
+  hosts: redis-ready
+  roles:
+    - infra-redis

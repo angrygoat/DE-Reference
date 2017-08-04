@@ -1,0 +1,35 @@
+---
+- name: Install Redis
+  become: true
+  shell: docker pull redis
+  tags:
+    - Redis
+
+- name: Generate configs
+  become: true
+  template:
+    src: redis.conf.j2
+    dest: /etc/redis.conf
+    owner: root
+    mode: 0644
+
+- name: Redis service
+  become: true
+  template:
+    src: redis.service.j2
+    dest: /usr/lib/systemd/system/redis.service
+    owner: root
+    mode: 0644
+
+- name: Enable systemd service
+  become: true
+  systemd:
+    name: redis
+    enabled: yes
+    daemon_reload: yes
+
+- name: Start service
+  become: true
+  service:
+    name: redis
+    state: started

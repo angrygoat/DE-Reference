@@ -1,0 +1,17 @@
+[Unit]
+Description=Redis for DE
+BindsTo=docker.service
+PartOf=docker.service
+After=docker.service
+Requisite=docker.service
+
+[Service]
+ExecStartPre=-/usr/bin/docker rm de_redis
+ExecStart=/usr/bin/docker run -p {{ redis_port }}:{{ redis_port}} -v /etc/redis.conf:/etc/redis.conf --log-driver=journald --name de_redis redis redis-server /etc/redis.conf
+ExecStop=-/usr/bin/docker stop de_redis
+Restart=on-failure
+
+SyslogIdentifier=de_registery_redis
+
+[Install]
+WantedBy=multi-user.target
