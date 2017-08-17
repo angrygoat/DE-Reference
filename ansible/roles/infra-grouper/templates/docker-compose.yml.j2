@@ -34,20 +34,20 @@ config_{{ grouper.http_server.compose_service }}:
     - "/etc/localtime:/etc/localtime"
     - "/etc/timezone:/etc/timezone"
 
-{{ grouper.loader.compose_service }}:
-  image: {{ grouper.image_repo }}
-  container_name: {{ grouper.loader.container_name }}
-  entrypoint: "sh"
-  command: [ "/opt/grouper/api/bin/gsh", "-loader" ]
-  restart: "unless-stopped"
-  log_driver: "syslog"
-  log_opt:
-    tag: "{{ '{{' }}.ImageName{{ '}}' }}/{{ '{{' }}.Name{{ '}}' }}"
-  volumes_from:
-    - config_grouper
-  volumes:
-    - "/etc/localtime:/etc/localtime"
-    - "/etc/timezone:/etc/timezone"
+#{{ grouper.loader.compose_service }}:
+#  image: {{ grouper.image_repo }}
+#  container_name: {{ grouper.loader.container_name }}
+#  entrypoint: "sh"
+#  command: [ "/opt/grouper/api/bin/gsh", "-loader" ]
+#  restart: "unless-stopped"
+#  log_driver: "syslog"
+#  log_opt:
+#    tag: "{{ '{{' }}.ImageName{{ '}}' }}/{{ '{{' }}.Name{{ '}}' }}"
+#  volumes_from:
+#    - config_grouper
+#  volumes:
+#    - "/etc/localtime:/etc/localtime"
+#    - "/etc/timezone:/etc/timezone"
 
 {{ grouper.http_server.compose_service }}:
   image: {{ grouper.http_server.image_repo }}

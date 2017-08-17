@@ -1,0 +1,91 @@
+# Swaps a service to a new version with zero downtime.
+# Needs other_color and current_color variables passed in, as well as service_name
+#
+# This role starts up the other_color services, uses consul to ensure they've
+# started and are ready for requests, switches the color (relying on
+# consul-template+nginx, or some other setup, to direct requests to the new
+# color), and then removes the current_color services.
+
+- include: restart-service.yaml
+  vars:
+    restart_service_name: "{{service_name}}_{{other_color}}"
+  environment:
+    DE_TAG: "{{docker.tag}}"
+    DE_ENV: "{{environment_name}}"
+    HOSTNAME: "{{ hostname_i.stdout_lines[0] }}"
+    COMPOSE_PROJECT_NAME: "{{ inventory_hostname_short }}"
+    CONSUL_TOKEN: "{{(inventory_hostname+environment_name+consul.get('salt', 'consul_salt')) | to_uuid}}"
+
+- block:
+  - name: Allocate a consul ACL token
+    when: consul_token != ""
+    consul_acl:
+      mgmt_token: "{{ consul_token }}"
+      host: "localhost"
+      port: "{{consul_port}}"
+      name: "Temporary {{service_name_short}} deployment token ({{current_color}} -> {{other_color}})"
+      rules:
+        - key: ''
+          policy: deny
+        - key: "{{environment_name}}/{{service_name_short}}/color"
+          policy: write
+        - service: ''
+          policy: deny
+        - service: '{{service_name_short}}'
+          policy: read
+    register: consul_deployment_token
+    ignore_errors: True
+
+  # We'll give it two whole minutes to come up. If that's not enough something's probably wrong anyway.
+  - name: wait for {{other_color}} server to be up
+    uri: url="http://localhost:{{consul_port}}/v1/health/service/{{service_name_short}}?passing&tag={{environment_name}}-{{other_color}}{% if consul_deployment_token and 'token' in consul_deployment_token %}&token={{consul_deployment_token.token}}{% endif %}" method=GET return_content=yes
+    register: health_check
+    until: health_check.content != "[]"
+    retries: 60
+    delay: 2
+
+  - fail: msg="The server did not come up"
+    when: health_check.content == "[]"
+
+  - name: switch color to {{other_color}}
+    uri: url="http://localhost:{{consul_port}}/v1/kv/{{environment_name}}/{{service_name_short}}/color{% if consul_deployment_token and 'token' in consul_deployment_token %}?token={{consul_deployment_token.token}}{% endif %}" method=PUT body="{{other_color}}" return_content=yes
+    register: color_switch
+    failed_when: color_switch.content != "true"
+  run_once: true
+  always:
+    - name: "Remove consul ACL token"
+      consul_acl:
+        mgmt_token: "{{ consul_token }}"
+        host: "localhost"
+        token: "{{consul_deployment_token.token}}"
+        state: absent
+      when: consul_deployment_token and 'token' in consul_deployment_token
+      ignore_errors: True
+    - fail: msg="The server did not come up"
+      when: health_check.content == "[]"
+
+- block:
+  - name: stop the {{stop_service_name}} container(s)
+    shell: "docker stop $(docker ps -qf 'label=com.docker.compose.service={{ item }}')"
+    ignore_errors: true
+    with_items: "{{ stop_service_name.split(' ') }}"
+    tags:
+      - docker_stop
+    vars:
+      stop_service_name: "{{service_name}}_{{current_color}}"
+
+  - name: remove the {{rm_service_name}} container (s)
+    shell: "docker rm -fv $(docker ps -aqf 'label=com.docker.compose.service={{ item }}')"
+    ignore_errors: yes
+    with_items: "{{ rm_service_name.split(' ') }}"
+    tags:
+      - docker_rm
+      - docker_rm_service
+    vars:
+      rm_service_name: "{{service_name}}_{{current_color}}{% if has_configs|default(true) %} config_{{service_name}}_{{current_color}}{% endif %}{% if has_data_container|default(false) %} {{data_container_service_name}}_{{service_name}}_{{current_color}}{% endif %}"
+  environment:
+    DE_TAG: "{{docker.tag}}"
+    DE_ENV: "{{environment_name}}"
+    HOSTNAME: "{{ hostname_i.stdout_lines[0] }}"
+    COMPOSE_PROJECT_NAME: "{{ inventory_hostname_short }}"
+    CONSUL_TOKEN: "{{(inventory_hostname+environment_name+consul.get('salt', 'consul_salt')) | to_uuid}}"

@@ -1,0 +1,53 @@
+# Performs a basic deployment of a service: pulls it and dependent images like configs and the data container,
+# stops and removes existing containers, then starts the service.
+---
+- name: pull the {{pull_service_name}} image(s)
+  shell: "docker-compose -f {{docker_compose_path}} pull {{pull_service_name}}"
+  register: docker_pull_v
+  async: 300
+  poll: 0
+  when: pull_images
+  tags:
+    - docker_pull
+    - docker_pull_service
+  vars:
+    pull_service_name: "{{restart_service_name}} {% if has_configs|default(true)   %}config_{{restart_service_name}}{% endif %} {% if has_data_container|default  (false) %}{{data_container_service_name}}_{{restart_service_name}}{% endif %}"
+
+- name: stop the {{stop_service_name}} container(s)
+  shell: "docker stop $(docker ps -qf 'label=com.docker.compose.service={{ item }}')"
+  ignore_errors: true
+  with_items: "{{ stop_service_name.split(' ') }}"
+  tags:
+    - docker_stop
+  vars:
+    stop_service_name: "{{restart_service_name}}"
+
+- name: remove the {{rm_service_name}} container (s)
+  shell: "docker rm -fv $(docker ps -aqf 'label=com.docker.compose.service={{ item }}')"
+  ignore_errors: yes
+  with_items: "{{ rm_service_name.split(' ') }}"
+  tags:
+    - docker_rm
+    - docker_rm_service
+  vars:
+    rm_service_name: "{{restart_service_name}}{% if has_configs|default(true) %} config_{{restart_service_name}}{% endif %}{% if has_data_container|default(false) %} {{data_container_service_name}}_{{restart_service_name}}{% endif %}"
+
+- name: wait for pull to be complete
+  async_status: jid={{ docker_pull_v.ansible_job_id }}
+  register: docker_pull_res
+  until: docker_pull_res.finished
+  when: pull_images
+  tags:
+    - docker_pull
+    - docker_pull_service
+  retries: 300
+  delay: 1
+
+- name: start {{up_service_name}}
+  shell: "docker-compose -f {{docker_compose_path}} up -d {% if force_recreate|default(true) %}--force-recreate{% endif %} {{up_service_name}}"
+  register: docker_up_v
+  changed_when: docker_up_v.stdout.find('is up to date') == -1
+  tags:
+    - docker_up
+  vars:
+    up_service_name: "{{restart_service_name}}"

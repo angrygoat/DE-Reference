@@ -1,0 +1,41 @@
+# Delegates to restart-service.yaml, since uncolored deployment simply restarts the service.
+---
+
+- block:
+  - when: available_services is not iterable
+    name: verify available_services was provided to check-service
+    fail: msg="An iterable available_services must be passed to check-service  .yaml"
+
+  - when: check_service_name not in available_services
+    name: verify that {{check_service_name}} exists in the docker-compose file
+    fail: msg="{{check_service_name}} is not available on this host"
+    vars:
+      check_service_name: "{{service_name}}"
+
+  - when: check_service_name not in available_services and
+          has_configs|default(true)
+    name: verify that {{check_service_name}} exists in the docker-compose file
+    fail: msg="{{check_service_name}} is not available on this host"
+    vars:
+      check_service_name: "config_{{service_name}}"
+
+  - when: check_service_name not in available_services and
+          has_data_container|default(false)
+    name: verify that {{check_service_name}} exists in the docker-compose file
+    fail: msg="{{check_service_name}} is not available on this host"
+    vars:
+      check_service_name: "{{data_container_service_name}}_{{service_name}}"
+  vars:
+    available_services: "{{service_list.stdout_lines}}"
+  tags:
+    - verify
+
+- include: restart-service.yaml
+  vars:
+    restart_service_name: "{{service_name}}"
+  environment:
+    DE_TAG: "{{docker.tag}}"
+    DE_ENV: "{{environment_name}}"
+    HOSTNAME: "{{ hostname_i.stdout_lines[0] }}"
+    COMPOSE_PROJECT_NAME: "{{ inventory_hostname_short }}"
+    CONSUL_TOKEN: "{% if consul is defined %}{{(inventory_hostname+environment_name+consul.get('salt', 'consul_salt')) | to_uuid}}{% endif %}"
