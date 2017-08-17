@@ -1,0 +1,13 @@
+---
+# tasks for services-common role
+- name: add the docker group to condor user
+  become: yes
+  user: name=condor groups=docker append=yes
+  when: ('docker-ready' in group_names) and
+        ('condor' in group_names or 'condor-submission' in group_names)
+  tags:
+      - init_users
+
+- name: create /var/log/de/
+  become: yes
+  file: path={{logging.dir}} owner=root group=root mode=0755 state=directory

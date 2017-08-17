@@ -1,0 +1,41 @@
+---
+
+- name: Update docker-compose file for Grouper
+  hosts: grouper:&systems
+  become: yes
+  roles:
+      - role: de-services-common
+        tags: [ 'init_iplant_user' ]
+      - role: infra-grouper
+
+- name: Redeploy grouper-nginx
+  hosts: grouper:&systems
+  become: yes
+  roles:
+    - role: de-deploy-service
+      has_configs: true
+      has_iplant_data: true
+      deploy_use_color: false
+      service_name: "{{ grouper.http_server.compose_service }}"
+  tags:
+    - grouper-nginx
+
+- name: Redeploy grouper
+  hosts: grouper:&systems
+  become: yes
+  roles:
+    - role: de-deploy-service
+      has_configs: true
+      has_iplant_data: false
+      deploy_use_color: false
+      service_name: "{{ grouper.compose_service }}"
+  tags:
+    - grouper
+
+- name: Post deployment end notification
+  hosts: grouper:&systems
+  roles:
+      - role: util-notify-chat
+        username: Grouper
+        icon: ":fish:"
+        msg: ":heavy_check_mark: Done deploying Grouper"
