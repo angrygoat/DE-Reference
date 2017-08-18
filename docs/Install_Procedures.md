@@ -151,7 +151,7 @@ openssl req -new -x509 -key server.key -out server.crt -days 365
 
 ```
 
-* Run Grouper install playbooks: **$ ansible-playbook -i inventory -e @group_vars -s -K grouper-all.yaml**
+* Run Grouper install playbooks: **$ ansible-playbook -i inventory -e @group_vars -s -K infra-grouper.yaml**
 
 * Run GSH utility to initialize Grouper registry:
 ```
