@@ -25,11 +25,11 @@
     - cas
     - properties
 
-- name: add proxy for maven
-  template: src=maven/settings.xml dest=/home/{{ansible_ssh_user}}/.m2/settings.xml
-  tags:
-    - cas
-    - properties
+#- name: add proxy for maven
+#  template: src=maven/settings.xml dest=/home/{{ansible_ssh_user}}/.m2/settings.xml
+#  tags:
+#    - cas
+#    - properties
 
 - name: copy log4j.xml
   copy: src=log4j.xml dest=/etc/cas/ owner={{ cas.tomcat_user }} group={{ cas.tomcat_group }}
@@ -39,6 +39,14 @@
 
 - name: set data ownership [all data is owned by tomcat]
   file: path=/etc/cas owner={{ cas.tomcat_user }} group={{ cas.tomcat_group }} recurse=true
+  tags:
+    - cas
+    - properties
+
+
+- name: set data ownership [all data is owned by tomcat]
+  file: path={{ cas.ssl_certificate_server_dir }} owner={{ cas.tomcat_user }} group={{ cas.tomcat_user }} recurse=true
+  when: cas.do_ssl_config
   tags:
     - cas
     - properties
@@ -67,12 +75,6 @@
         - properties
         - apache_vhost
 
-- name: set data ownership [all data is owned by tomcat]
-  file: path={{ cas.ssl_certificate_server_dir }} owner={{ cas.tomcat_user }} group={{ cas.tomcat_user }} recurse=true
-  when: cas.do_ssl_config
-  tags:
-    - cas
-    - properties
 
 #
 # WAR file deployment and virtual host configuration

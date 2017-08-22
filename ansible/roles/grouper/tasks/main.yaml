@@ -39,11 +39,12 @@
   tags:
     - config
 
-- name: ensure that /etc/nginx exists
-  sudo: yes
-  file: path=/etc/nginx state=directory mode=0755
-  tags:
-    - config
+# XDCI will deploy without grouper-nginx
+#- name: ensure that /etc/nginx exists
+#  sudo: yes
+#  file: path=/etc/nginx state=directory mode=0755
+#  tags:
+#    - config
 
 - name: generate grouper.client.properties
   sudo: yes
@@ -125,12 +126,12 @@
     - config
     - config_tomcat
 
-- name: configure nginx
-  sudo: yes
-  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf mode=0644
-  register: nginx_conf_v
-  tags:
-    - config- config_nginx
+#- name: configure nginx
+#  sudo: yes
+#  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf mode=0644
+#  register: nginx_conf_v
+#  tags:
+#    - config- config_nginx
 
 - name: docker pull iplant-grouper
   sudo: yes
@@ -141,13 +142,13 @@
     - docker_pull
     - docker_pull_iplant-grouper
 
-- name: docker pull nginx-ssl
-  sudo: yes
-  shell: docker pull {{docker.user}}/{{grouper.http_server.image_name}}:{{docker.tag}}
-  register: docker_pul_nginx_ssl_v #https://mail.google.com/mail/u/0/#inbox/152f072cb44fcde8
-  tags:
-    - docker_pull
-    - docker-pull_iplant-grouper
+#- name: docker pull nginx-ssl
+#  sudo: yes
+#  shell: docker pull {{docker.user}}/{{grouper.http_server.image_name}}:{{docker.tag}}
+#  register: docker_pul_nginx_ssl_v #https://mail.google.com/mail/u/0/#inbox/152f072cb44fcde8
+#  tags:
+#    - docker_pull
+#    - docker-pull_iplant-grouper
 
 - name: place data container systemd service file
   sudo: yes
@@ -163,13 +164,13 @@
     - update_service_files
     - update_service_file_grouper
 
-- name: place grouper-nginx Systemd service file
-  template: src={{grouper.http_server.service_name}} dest=/usr/lib/systemd/system/ group=root owner=root mode=0664
-  register: service_file_grouper_nginx_v
-  tags:
-    - update_service_files
-    - update_service_file_grouper
-    - update_service_file_grouper-nginx
+#- name: place grouper-nginx Systemd service file
+#  template: src={{grouper.http_server.service_name}} dest=/usr/lib/systemd/system/ group=root owner=root mode=0664
+#  register: service_file_grouper_nginx_v
+#  tags:
+#    - update_service_files
+#    - update_service_file_grouper
+#    - update_service_file_grouper-nginx
 
 - name: reload systemd
   shell: systemctl daemon-reload
@@ -219,11 +220,11 @@
     - restart_services
     - restart_grouper
 
-- name: restart grouper-nginx service
-  service: name={{grouper.http_server.service_name}} state=restarted
-  when: nginx_conf_v.changed or
-        docker_pul_nginx_ssl_v.changed or
-        service_file_grouper_nginx_v.changed
-  tags:
-    - restart_services
-    - restart_grouper-nginx
+#- name: restart grouper-nginx service
+#  service: name={{grouper.http_server.service_name}} state=restarted
+#  when: nginx_conf_v.changed or
+#        docker_pul_nginx_ssl_v.changed or
+#        service_file_grouper_nginx_v.changed
+#  tags:
+#    - restart_services
+#    - restart_grouper-nginx

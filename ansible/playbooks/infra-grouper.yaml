@@ -8,17 +8,18 @@
         tags: [ 'init_iplant_user' ]
       - role: infra-grouper
 
-- name: Redeploy grouper-nginx
-  hosts: grouper:&systems
-  become: yes
-  roles:
-    - role: de-deploy-service
-      has_configs: true
-      has_iplant_data: true
-      deploy_use_color: false
-      service_name: "{{ grouper.http_server.compose_service }}"
-  tags:
-    - grouper-nginx
+# xdci will deploy without grouper-nginx
+#- name: Redeploy grouper-nginx
+#  hosts: grouper:&systems
+#  become: yes
+#  roles:
+#    - role: de-deploy-service
+#      has_configs: true
+#      has_iplant_data: true
+#      deploy_use_color: false
+#      service_name: "{{ grouper.http_server.compose_service }}"
+#  tags:
+#    - grouper-nginx
 
 - name: Redeploy grouper
   hosts: grouper:&systems
