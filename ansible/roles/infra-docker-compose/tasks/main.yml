@@ -1,0 +1,72 @@
+---
+- name: Check for environment-specific docker-compose file
+  become: no
+  local_action: stat path={{role_path}}/files/docker-compose.yml.{{environment_name}}
+  register: stat_env_file
+  tags:
+      - install_docker-compose
+      - update-docker-compose-file
+
+- name: Check for property-specific docker-compose file
+  become: no
+  local_action: stat path={{role_path}}/files/docker-compose.yml.{% if use_color %}colored{% else %}uncolored{% endif %}-{% if use_consul_configs %}consul{% else %}noconsul{% endif %}
+  register: stat_prop_file
+  tags:
+      - install_docker-compose
+      - update-docker-compose-file
+
+- name: Place updated docker-compose.yml file (using environment-specific file)
+  become: yes
+  copy: src=docker-compose.yml.{{environment_name}} dest={{docker.compose_path}} group=root owner=root mode=0664
+  when: stat_env_file.stat.exists
+  tags:
+      - install_docker-compose
+      - update-docker-compose-file
+
+- name: Place updated docker-compose.yml file (using file based on environment properties)
+  become: yes
+  copy: src=docker-compose.yml.{% if use_color %}colored{% else %}uncolored{% endif %}-{% if use_consul_configs %}consul{% else %}noconsul{% endif %} dest={{docker.compose_path}} group=root owner=root mode=0664
+  when: not stat_env_file.stat.exists and stat_prop_file.stat.exists
+  tags:
+      - install_docker-compose
+      - update-docker-compose-file
+
+- fail: msg="No suitable docker-compose.yml file found"
+  when: not stat_env_file.stat.exists and not stat_prop_file.stat.exists
+  tags:
+      - install_docker-compose
+      - update-docker-compose-file
+
+- name: Place the de-dc script
+  become: yes
+  template: src=de-dc.j2 dest=/usr/bin/de-dc owner=root group=root mode=0755
+  tags:
+    - install_docker-compose
+    - update-de-dc
+
+- name: ensure that /etc/dc-env-files exists
+  file: path=/etc/dc-env-files state=directory mode=0755
+  tags:
+    - install_docker-compose
+    - update-docker-compose-file
+
+- name: place service env files
+  become: yes
+  template: src=dc-env-files/{{ item }}.env.j2 dest=/etc/dc-env-files/{{ item }}.env owner=root group=root mode=0644
+  with_items:
+    - apps
+    - clockwork
+    - data-info
+    - dewey
+    - info-typer
+    - infosquito
+    - iplant-email
+    - iplant-groups
+    - kifshare
+    - metadata
+    - monkey
+    - notification-agent
+    - terrain
+  tags:
+    - install_docker-compose
+    - update-docker-compose-file

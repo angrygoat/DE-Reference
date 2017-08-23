@@ -1,0 +1,11 @@
+---
+- hosts: docker-ready:!grouper:!ui-proxy
+  become: yes
+  roles:
+      - role: util-notify-chat
+        msg: "Deploying docker-compose files"
+
+      - role: infra-docker-compose
+
+      - role: util-notify-chat
+        msg: ":heavy_check_mark: Done deploying docker-compose files"
