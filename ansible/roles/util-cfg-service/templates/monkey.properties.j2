@@ -1,0 +1,27 @@
+monkey.log-progress-enabled  = true
+monkey.log-progress-interval = 10000
+monkey.retry-period-ms       = 1000
+
+monkey.amqp.uri      = {{ amqp_de_uri }}
+monkey.amqp.queue    = monkey
+
+monkey.amqp.exchange.name        = {{ amqp.de.name }}
+monkey.amqp.exchange.durable     = {{ amqp.de.durable }}
+monkey.amqp.exchange.auto-delete = {{ amqp.de.auto_delete }}
+
+monkey.es.url            = {{ elasticsearch_uri }}
+monkey.es.username       = {{ indices.data.es_user }}
+monkey.es.password       = {{ indices.data.es_password }}
+monkey.es.index          = {{ indices.data.write_alias }}
+monkey.es.tag-type       = tag
+monkey.es.batch-size     = {{ elasticsearch.batch_size }}
+monkey.es.scroll-size    = {{ elasticsearch.scroll_size }}
+monkey.es.scroll-timeout = 1m
+
+monkey.tags.host       = {{ metadata_db_host }}
+monkey.tags.port       = {{ metadata_db_port }}
+monkey.tags.db         = {{ metadata_db_name }}
+monkey.tags.user       = {{ metadata_db_user }}
+monkey.tags.password   = {{ metadata_db_password }}
+monkey.tags.batch-size = 10
+

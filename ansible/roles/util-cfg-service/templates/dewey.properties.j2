@@ -1,0 +1,27 @@
+dewey.environment-name          = {{ environment_name }}
+
+dewey.amqp.uri                  = {{ amqp_irods_uri }}
+dewey.amqp.exchange.name        = {{ amqp.irods.name }}
+dewey.amqp.exchange.durable     = {{ amqp.irods.durable }}
+dewey.amqp.exchange.auto-delete = {{ amqp.irods.auto_delete }}
+dewey.amqp.queue_name           = {{ dewey.amqp.queue_name }}
+dewey.amqp.qos                  = 100
+
+dewey.events.amqp.uri           = {{ amqp_de_uri }}
+
+dewey.es.uri                    = {{ elasticsearch_uri }}
+dewey.es.host                   = {{ elasticsearch.host }}
+dewey.es.port                   = {{ elasticsearch.port }}
+dewey.es.username               = {{ indices.data.es_user }}
+dewey.es.password               = {{ indices.data.es_password }}
+dewey.es.index                  = {{ indices.data.write_alias }}
+
+dewey.irods.host                = {{ irods.host }}
+dewey.irods.port                = {{ irods.port }}
+dewey.irods.zone                = {{ irods.zone }}
+dewey.irods.user                = {{ irods.user }}
+dewey.irods.password            = {{ irods.password }}
+dewey.irods.default-resource    = {{ irods.default_resource }}
+dewey.irods.home                = {{ irods.home }}
+
+dewey.status.listen-port        = {{ default_service_port }}

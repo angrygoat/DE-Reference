@@ -1,0 +1,42 @@
+data-info.anon-files-base-url        = https://{{ de.host }}/anon-files
+data-info.anon-user                  = anonymous
+data-info.bad-chars                  = {{ irods.bad_chars }}
+data-info.community-data             = {{ irods.home }}/shared
+data-info.copy-key                   = ipc-de-copy-from
+data-info.max-paths-in-request       = {{ fs_max_paths_in_request }}
+data-info.metadata.base-url          = http://{{ metadata.host }}:{{ metadata.port }}
+data-info.tree-urls.base-url         = http://{{ tree_urls.host }}:{{ tree_urls.port }}
+data-info.kifshare-download-template = \{\{url\}\}/d/\{\{ticket-id\}\}/\{\{filename\}\}
+data-info.kifshare-external-url      = https://{{ de.host }}/dl
+data-info.perms-filter               = {{ irods.admins }}
+data-info.port                       = {{ default_service_port }}
+
+# ICAT configuration
+data-info.icat.host           = {{ icat.host }}
+data-info.icat.port           = {{ icat.port }}
+data-info.icat.user           = {{ icat.user }}
+data-info.icat.password       = {{ icat.password }}
+data-info.icat.db             = {{ icat.db }}
+
+# iRODS configuration
+data-info.irods.host          = {{ irods.host }}
+data-info.irods.port          = {{ irods.port }}
+data-info.irods.user          = {{ irods.user }}
+data-info.irods.password      = {{ irods.password }}
+data-info.irods.home          = {{ irods.home }}
+data-info.irods.zone          = {{ irods.zone }}
+data-info.irods.resc          =
+data-info.irods.max-retries   = 10
+data-info.irods.retry-sleep   = 1000
+data-info.irods.use-trash     = true
+data-info.irods.admin-users   = {{ irods_admin_users }}
+
+# file typing configuration
+data-info.type-detect.type-attribute       = ipc-filetype
+
+# HT Path List Files
+data-info.path-list.file-identifier = {{ path_list_file_identifier }}
+data-info.path-list.info-type       = {{ path_list_info_type }}
+
+# AMQP configuration
+data-info.amqp.uri = {{ amqp_de_uri }}

@@ -1,0 +1,27 @@
+info-typer.environment-name     = {{ environment_name }}
+
+info-typer.type-attribute       = ipc-filetype
+info-typer.filetype-read-amount = 1024
+
+# iRODS configuration
+info-typer.irods.host        = {{ irods.host }}
+info-typer.irods.port        = {{ irods.port }}
+info-typer.irods.user        = {{ irods.user }}
+info-typer.irods.pass        = {{ irods.password }}
+info-typer.irods.zone        = {{ irods.zone }}
+info-typer.irods.home        = {{ irods.home }}
+info-typer.irods.resc        =
+info-typer.irods.max-retries = 10
+info-typer.irods.retry-sleep = 1000
+info-typer.irods.use-trash   = true
+
+# AMQP settings
+info-typer.amqp.uri                  = {{ amqp_irods_uri }}
+info-typer.amqp.retry-sleep          = 10000
+info-typer.amqp.exchange             = {{ amqp.irods.name }}
+info-typer.amqp.exchange.type        = {{ amqp.irods.type }}
+info-typer.amqp.exchange.durable     = {{ amqp.irods.durable }}
+info-typer.amqp.exchange.auto-delete = {{ amqp.irods.auto_delete }}
+info-typer.amqp.qos                  = 100
+
+info-typer.events.amqp.uri = {{ amqp_de_uri }}

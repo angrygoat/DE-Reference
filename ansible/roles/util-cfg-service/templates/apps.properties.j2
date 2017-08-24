@@ -1,0 +1,90 @@
+# Application details.
+apps.app.listen-port      = {{ default_service_port }}
+apps.app.environment-name = {{ environment_name }}
+
+# Route-independent feature flags.
+apps.features.agave      = {{ features.agave }}
+apps.features.agave.jobs = {{ features.agave }}
+
+# Database settings.
+apps.db.driver      = {{ db_driver }}
+apps.db.subprotocol = {{ db_vendor }}
+apps.db.host        = {{ db_host }}
+apps.db.port        = {{ db_port }}
+apps.db.name        = {{ db_name }}
+apps.db.user        = {{ db_user }}
+apps.db.password    = {{ db_password }}
+
+# JEX connection settings.
+apps.jex.base-url = {{ jex.base }}
+
+# Data Info connection settings.
+apps.data-info.base-url = http://{{ data_info.host }}:{{ data_info.port }}
+
+# Workspace app category names.
+apps.workspace.root-app-category            = {{ apps.user_root }}
+apps.workspace.default-app-categories       = {{ apps.user_subs }}
+apps.workspace.dev-app-category-index       = 0
+apps.workspace.favorites-app-category-index = 1
+apps.workspace.public-id                    = 00000000-0000-0000-0000-000000000000
+apps.workspace.metadata.category.attrs      = rdf:type, http://edamontology.org/has_topic
+apps.workspace.metadata.beta.attr.iri       = {{ apps.beta_attr_iri }}
+apps.workspace.metadata.beta.attr.label     = {{ apps.beta_attr_label }}
+apps.workspace.metadata.beta.value          = {{ apps.beta_value }}
+
+# The domain name to append to the user id to get the fully qualified user id.
+apps.uid.domain = {{ cas_uid_domain }}
+
+# The path to the home directory in iRODS.
+apps.irods.home = {{ irods.home }}
+
+# Batch job settings.
+apps.batch.group               = {{ jex.batch_group }}
+apps.batch.path-list.info-type = {{ path_list_info_type }}
+apps.batch.path-list.max-paths = {{ apps.path_list_max_paths }}
+apps.batch.path-list.max-size  = {{ apps.path_list_max_size }}
+
+# Agave connection settings.
+apps.agave.base-url             = {{ agave.base_url }}
+apps.agave.key                  = {{ agave.client_key }}
+apps.agave.secret               = {{ agave.client_secret }}
+apps.agave.oauth-base           = {{ agave.base_url }}/oauth2
+apps.agave.oauth-refresh-window = {{ agave.oauth_refresh_window }}
+apps.agave.redirect-uri         = {{ de.base }}/oauth/callback/agave
+apps.agave.storage-system       = {{ irods.host }}
+apps.agave.read-timeout         = {{ agave.read_timeout }}
+apps.agave.page-length          = {{ agave.page_length }}
+
+# Agave callback settings.
+apps.agave.callback-base = {{ agave.job_status_callback }}
+
+# PGP Settings
+apps.pgp.keyring-path = {{ pgp_keyring_path }}
+apps.pgp.key-password = {{ pgp_key_password }}
+
+# Notification agent connection settings.
+apps.notificationagent.base-url = {{ notificationagent.base }}
+
+# The job status polling interval.
+apps.jobs.poll-interval = {{ job_status_poll_interval }}
+
+# The base URL for iplant-groups.
+apps.iplant-groups.base-url     = {{ iplant_groups.base_url }}
+apps.iplant-groups.grouper-user = {{ apps.grouper_user }}
+
+# Metadata connection settings
+apps.metadata.base-url = http://{{ metadata.host }}:{{ metadata.port }}
+
+# Permissions service connection settings.
+apps.permissions.base-url = {{ permissions_base }}
+
+# iPlant Email service settings.
+apps.email.base-url             = {{ iplant_email.base }}
+apps.email.app-deletion.from    = {{ de_mail_from_addr }}
+apps.email.app-deletion.subject = Your "%s" app has been administratively deprecated
+
+# UI host
+apps.ui.base-url = {{ de.base }}
+
+# AMQP
+apps.amqp.uri = {{ amqp_de_uri }}
