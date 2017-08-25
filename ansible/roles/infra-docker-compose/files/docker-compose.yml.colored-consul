@@ -10,49 +10,49 @@ services:
   # Data containers that don't contain service configurations.
   ###
   iplant_data_apps_green:
-    image: gims.iplantcollaborative.org:5000/iplant_data:latest
+    image: x-psql.edc.renci.org:443/iplant_data:latest
     labels:
       org.cyverse.name: "apps"
       org.cyverse.color: "green"
       org.cyverse.type: "data"
 
   iplant_data_apps_blue:
-    image: gims.iplantcollaborative.org:5000/iplant_data:latest
+    image: x-psql.edc.renci.org:443/iplant_data:latest
     labels:
       org.cyverse.name: "apps"
       org.cyverse.color: "blue"
       org.cyverse.type: "data"
 
   iplant_data_de_ui_green:
-    image: gims.iplantcollaborative.org:5000/iplant_data:latest
+    image: x-psql.edc.renci.org:443/iplant_data:latest
     labels:
       org.cyverse.name: "ui"
       org.cyverse.color: "green"
       org.cyverse.type: "data"
 
   iplant_data_de_ui_blue:
-    image: gims.iplantcollaborative.org:5000/iplant_data:latest
+    image: x-psql.edc.renci.org:443/iplant_data:latest
     labels:
       org.cyverse.name: "ui"
       org.cyverse.color: "blue"
       org.cyverse.type: "data"
 
   iplant_data_de_ui_nginx:
-    image: gims.iplantcollaborative.org:5000/iplant_data:latest
+    image: x-psql.edc.renci.org:443/iplant_data:latest
     labels:
       org.cyverse.name: "ui-nginx"
       org.cyverse.proxy: ""
       org.cyverse.type: "data"
 
   iplant_data_terrain_green:
-    image: gims.iplantcollaborative.org:5000/iplant_data:latest
+    image: x-psql.edc.renci.org:443/iplant_data:latest
     labels:
       org.cyverse.name: "terrain"
       org.cyverse.color: "green"
       org.cyverse.type: "data"
 
   iplant_data_terrain_blue:
-    image: gims.iplantcollaborative.org:5000/iplant_data:latest
+    image: x-psql.edc.renci.org:443/iplant_data:latest
     labels:
       org.cyverse.name: "terrain"
       org.cyverse.color: "blue"
@@ -62,13 +62,13 @@ services:
   # Set up the configuration containers
   ###
   config_image_janitor:
-    image: gims.iplantcollaborative.org:5000/de-configs-${DE_ENV}:${DE_TAG}
+    image: x-psql.edc.renci.org:443/de-configs-${DE_ENV}:${DE_TAG}
     labels:
       org.cyverse.name: "image-janitor"
       org.cyverse.type: "configs"
 
   config_infosquito:
-    image: gims.iplantcollaborative.org:5000/de-configs-${DE_ENV}:${DE_TAG}
+    image: x-psql.edc.renci.org:443/de-configs-${DE_ENV}:${DE_TAG}
     labels:
       org.cyverse.name: "infosquito"
       org.cyverse.type: "configs"
