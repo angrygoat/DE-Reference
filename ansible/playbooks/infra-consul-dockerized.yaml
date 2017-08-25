@@ -1,0 +1,26 @@
+---
+- name: Redeploy dockerized consul to registrator hosts
+  hosts: registrator:&systems
+  become: yes
+  gather_facts: no
+  roles:
+    - role: util-notify-chat
+      username: Consul
+      icon: ":consul:"
+      msg: "Deploying dockerized Consul"
+      when: use_overlay
+    - role: de-deploy-service
+      force_recreate: false
+      docker_compose_path: "{{ de_config_dir }}/consul/docker-compose.yml"
+      has_configs: false
+      has_iplant_data: false
+      deploy_use_color: false
+      service_name: "consul"
+      when: use_overlay
+    - role: util-notify-chat
+      username: Consul
+      icon: ":consul:"
+      msg: ":heavy_check_mark: Done deploying dockerized Consul"
+      when: use_overlay
+  tags:
+    - consul

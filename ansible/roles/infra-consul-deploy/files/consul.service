@@ -1,0 +1,15 @@
+[Unit]
+Description=Service discovery registry
+Requires=network.service
+Wants=network-online.target
+After=network.service network-online.target
+Before=docker.service
+
+[Service]
+ExecStart=/usr/local/bin/consul agent -server -config-dir=/etc/iplant/de/consul/config
+Restart=on-failure
+StartLimitInterval=60s
+StartLimitBurst=3
+
+[Install]
+WantedBy=multi-user.target

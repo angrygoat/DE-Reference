@@ -1,0 +1,7 @@
+---
+- include: infra-consul-config.yaml
+
+- include: infra-consul-baremetal.yaml
+- include: infra-consul-dockerized.yaml
+
+- include: infra-registrator.yaml

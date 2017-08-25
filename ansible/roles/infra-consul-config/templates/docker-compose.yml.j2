@@ -1,0 +1,58 @@
+###
+# Service definitions
+###
+registrator:
+  image: "gliderlabs/registrator:master"
+  command: ["-internal", "-resync", "60", "consul://localhost:{% if use_overlay %}8530{% else %}8500{% endif %}"]
+  container_name: "registrator"
+  {% if consul is mapping and 'master_token' in consul -%}
+  environment:
+    - CONSUL_HTTP_TOKEN={{ consul.master_token }}
+  {% endif -%}
+  net: "host"
+  restart: "unless-stopped"
+  log_driver: "syslog"
+  log_opt:
+    tag: "{% raw %}{{.ImageName}}/{{.Name}}{% endraw %}"
+  volumes:
+    - "/etc/localtime:/etc/localtime"
+    - "/etc/timezone:/etc/timezone"
+    - "/var/run/docker.sock:/tmp/docker.sock"
+
+{% if use_overlay %}
+consul:
+  image: "gliderlabs/consul-agent:latest"
+  container_name: "consul-{{ inventory_hostname }}"
+  command: ["-ui"]
+  ports:
+    - "8330:8330"
+    - "8331:8331"
+    - "8331:8331/udp"
+    - "8332:8332"
+    - "8332:8332/udp"
+    - "8430:8430"
+    - "8530:8530"
+  environment:
+    - SERVICE_8300_IGNORE=true
+    - SERVICE_8301_IGNORE=true
+    - SERVICE_8302_IGNORE=true
+    - SERVICE_8400_IGNORE=true
+    - SERVICE_8500_IGNORE=true
+    - SERVICE_8600_IGNORE=true
+    - SERVICE_8330_IGNORE=true
+    - SERVICE_8331_IGNORE=true
+    - SERVICE_8332_IGNORE=true
+    - SERVICE_8430_IGNORE=true
+    - SERVICE_8530_CHECK_HTTP=/
+    - SERVICE_8530_TAGS=${DE_ENV}
+  net: de-${DE_ENV}
+  restart: "unless-stopped"
+  log_driver: "syslog"
+  log_opt:
+    tag: "{% raw %}{{.ImageName}}/{{.Name}}{% endraw %}"
+  volumes:
+    - "/etc/localtime:/etc/localtime"
+    - "/etc/timezone:/etc/timezone"
+    - "/etc/iplant/de/consul-dockerized/consul_config.json:/config/consul_config.json"
+    - "/etc/iplant/de/consul-dockerized/data:/data"
+{% endif %}

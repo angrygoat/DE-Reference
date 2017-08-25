@@ -1,0 +1,13 @@
+{
+  "data_dir": "{{ de_config_dir }}/consul/data",
+  "bootstrap_expect": {{ groups['consul'] | length }},
+  {%- if consul.encrypt -%}
+  "encrypt": "{{ consul.encrypt }}",
+  {%- endif -%}
+  {%- if groups['consul'] | length > 1 -%}
+  "retry_join": [{% for item in groups['consul'] if item != inventory_hostname %}"{{ item }}:8301"{% if not loop.last %},{% endif %}{% endfor %}],
+  {%- endif -%}
+  "bind_addr": "{{ ansible_default_ipv4.address }}",
+  "acl_datacenter": "dc1",
+  "acl_master_token": "{{ consul.master_token | default("CONSUL_MASTER_TOKEN") }}"
+}

@@ -1,0 +1,60 @@
+---
+
+# combination of 'serial: 1' and 'wait_for' ensures only one consul server is down at a time
+- name: Redeploy consul
+  hosts: consul:&systems
+  become: yes
+  gather_facts: no
+  serial: 1
+  roles:
+    - role: util-notify-chat
+      username: Consul
+      icon: ":consul:"
+      msg: "Deploying Consul"
+    - role: infra-consul-deploy
+    - role: util-notify-chat
+      username: Consul
+      icon: ":consul:"
+      msg: ":heavy_check_mark: Done deploying Consul"
+  tasks:
+    - wait_for: port=8500 delay=10
+  tags:
+    - consul
+
+- name: "Set up consul ACL tokens"
+  hosts: consul:&systems
+  run_once: true
+  become: true
+  gather_facts: false
+  tasks:
+    - name: update python-consul
+      pip: name="python-consul" state="present"
+      when: consul is mapping and 'master_token' in consul
+    - name: update pyhcl
+      pip: name="pyhcl" state="present"
+      when: consul is mapping and 'master_token' in consul
+    - name: Set consul ACL policy for the anonymous token
+      when: consul is mapping and 'master_token' in consul
+      consul_acl:
+          mgmt_token: "{{consul.master_token}}"
+          token: "anonymous"
+          rules:
+            - key: ''
+              policy: write
+            - key: 'configs/'
+              policy: deny
+    - name: Set consul ACL policy for the host tokens
+      when: consul is mapping and 'master_token' in consul
+      consul_acl:
+          mgmt_token: "{{consul.master_token}}"
+          token: "{{(item+environment_name+consul.get('salt', 'consul_salt')) | to_uuid}}"
+          name: "Run token for {{item}}"
+          rules:
+            - key: ''
+              policy: read
+            - service: ''
+              policy: read
+      with_inventory_hostnames: services:ui:&systems
+  tags:
+    - consul
+    - consul-acls

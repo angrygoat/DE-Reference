@@ -1,0 +1,78 @@
+- name: ensure that /etc/iplant/de/consul exists
+  file: path={{ de_config_dir }}/consul state=directory mode=0755
+  tags:
+    - config
+    - bare-metal
+
+- name: ensure that /etc/iplant/de/consul/config exists
+  file: path={{ de_config_dir }}/consul/config state=directory mode=0755
+  tags:
+    - config
+    - bare-metal
+
+- name: ensure that /etc/iplant/de/consul/data exists
+  file: path={{ de_config_dir }}/consul/data state=directory mode=0755
+  tags:
+    - config
+    - bare-metal
+
+- name: remove old consul_config.json if present
+  file: path={{ de_config_dir }}/consul/consul_config.json state=absent
+  tags:
+    - config
+    - bare-metal
+
+- name: place static consul configuration
+  copy:
+     src:   server.json
+     dest:  "{{ de_config_dir }}/consul/config/server.json"
+     group: root
+     owner: root
+     mode:  0644
+  tags:
+    - config
+    - bare-metal
+
+- name: place the customized consul config file for bare-metal deployment
+  become: yes
+  template: src=consul_config.json.j2 dest={{ de_config_dir }}/consul/config/consul_config.json owner=root group=root mode=0644
+  tags:
+    - config
+    - bare-metal
+
+- name: ensure that /etc/iplant/de/consul-dockerized exists
+  file: path={{ de_config_dir }}/consul-dockerized state=directory mode=0755
+  when: use_overlay
+  tags:
+    - config
+    - dockerized
+
+- name: ensure that /etc/iplant/de/consul-dockerized/data exists
+  file: path={{ de_config_dir }}/consul-dockerized/data state=directory mode=0755
+  when: use_overlay
+  tags:
+    - config
+    - dockerized
+
+- name: place the customized consul config file for dockerized agent
+  become: yes
+  template: src=consul_config.json.dockerized.j2 dest={{ de_config_dir }}/consul-dockerized/consul_config.json owner=root group=root mode=0644
+  when: use_overlay
+  tags:
+    - config
+    - dockerized
+
+- name: place the docker compose file.
+  become: yes
+  template: src=docker-compose.yml.j2 dest={{ de_config_dir }}/consul/docker-compose.yml owner=root group=root mode=0644
+  tags:
+    - docker-compose
+    - dockerized
+    - bare-metal
+
+- name: Place the color-of script
+  become: yes
+  template: src=color-of.j2 dest=/usr/bin/color-of owner=root group=root mode=0755
+  tags:
+    - config
+    - update-color-of

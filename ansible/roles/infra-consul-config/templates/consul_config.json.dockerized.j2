@@ -1,0 +1,20 @@
+{
+  {%- if consul.encrypt -%}
+  "encrypt": "{{ consul.encrypt }}",
+  {%- endif -%}
+  {%- if groups['consul'] | length > 1 -%}
+  "retry_join": [{% for item in groups['consul'] %}"{{ item }}:8301"{% if not loop.last %},{% endif %}{% endfor %}],
+  {%- endif -%}
+  "advertise_addr": "{{ ansible_default_ipv4.address }}",
+  "acl_datacenter": "dc1",
+  "acl_master_token": "{{ consul.master_token | default("CONSUL_MASTER_TOKEN") }}",
+  "node_name": "{{ inventory_hostname }}-dockerized",
+  "ports": {
+    "http": 8530,
+    "rpc": 8430,
+    "server": 8330,
+    "serf_lan": 8331,
+    "serf_wan": 8332,
+    "dns": -1
+  }
+}

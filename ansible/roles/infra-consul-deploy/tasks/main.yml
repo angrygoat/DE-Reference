@@ -1,0 +1,33 @@
+- name: pull consul image
+  shell: docker pull gliderlabs/consul:latest
+
+- name: install consul
+  shell: docker run --rm -v /usr/local/bin:/bin-copy --entrypoint "cp" gliderlabs/consul:latest /bin/consul /bin-copy/consul
+
+- name: Disable consul
+  service: name=consul enabled=false
+  ignore_errors: true
+
+- name: Place systemd unit file
+  copy:
+      src: consul.service
+      dest: "/usr/lib/systemd/system/consul.service"
+      group: "root"
+      owner: "root"
+      mode: 0644
+
+- name: Reload systemd
+  shell: systemctl daemon-reload
+
+- name: Stop old consul if present
+  ignore_errors: yes
+  become: yes
+  shell: docker stop consul
+
+- name: Remove old consul if present
+  ignore_errors: yes
+  become: yes
+  shell: docker rm consul
+
+- name: Enable and restart consul.service
+  service: name=consul state=restarted enabled=true

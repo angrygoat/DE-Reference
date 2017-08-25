@@ -1,0 +1,17 @@
+---
+- name: Update docker-compose file and config for Consul
+  hosts: consul:registrator:&systems
+  become: yes
+  roles:
+      - role: util-notify-chat
+        username: Consul
+        icon: ":consul:"
+        msg: "Updating Consul configuration"
+      - role: infra-consul-config
+      - role: util-notify-chat
+        username: Consul
+        icon: ":consul:"
+        msg: ":heavy_check_mark: Done updating Consul configuration"
+  tags:
+    - registrator
+    - consul

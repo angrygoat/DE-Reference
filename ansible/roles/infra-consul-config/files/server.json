@@ -1,0 +1,5 @@
+{
+	"client_addr": "0.0.0.0",
+	"leave_on_terminate": true,
+	"ui": true
+}
