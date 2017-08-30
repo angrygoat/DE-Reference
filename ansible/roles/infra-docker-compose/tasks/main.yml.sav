@@ -1,7 +1,24 @@
 ---
+- name: Check for environment-specific docker-compose file
+  become: no
+  local_action: stat path={{role_path}}/files/docker-compose.yml.{{environment_name}}
+  register: stat_env_file
+  tags:
+      - install_docker-compose
+      - update-docker-compose-file
+
+- name: Check for property-specific docker-compose file
+  become: no
+  local_action: stat path={{role_path}}/files/docker-compose.yml.{% if use_color %}colored{% else %}uncolored{% endif %}-{% if use_consul_configs %}consul{% else %}noconsul{% endif %}
+  register: stat_prop_file
+  tags:
+      - install_docker-compose
+      - update-docker-compose-file
+
 - name: Place updated docker-compose.yml file (using environment-specific file)
   become: yes
-  template: src="docker-compose.yml.j2" dest="/etc/docker-compose.yml" owner={{owner}} group={{group}} mode=0644
+  copy: src=docker-compose.yml.{{environment_name}} dest={{docker.compose_path}} group=root owner=root mode=0664
+  when: stat_env_file.stat.exists
   tags:
       - install_docker-compose
       - update-docker-compose-file
