@@ -1,10 +1,13 @@
 # -*- mode: yaml -*-
 
 version: '2'
-networks:
-  default:
-    external:
-      name: de-${DE_ENV}
+
+# trying without overlay
+#networks:
+#  default:
+#    external:
+#      name: de-${DE_ENV}
+
 services:
   ###
   # Data containers that don't contain service configurations.
@@ -90,7 +93,7 @@ services:
     volumes_from:
       - iplant_data_apps_green
     ports:
-      - "60000"
+      - "5000:60000"
     logging:
       driver: "syslog"
       options:
@@ -117,7 +120,7 @@ services:
     volumes_from:
       - iplant_data_apps_blue
     ports:
-      - "60000"
+      - "5000:60000"
     logging:
       driver: "syslog"
       options:

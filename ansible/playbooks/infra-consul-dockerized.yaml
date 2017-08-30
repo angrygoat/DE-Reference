@@ -1,6 +1,7 @@
 ---
 - name: Redeploy dockerized consul to registrator hosts
-  hosts: registrator:&systems
+  #hosts: registrator:&systems
+  hosts: docker-ready
   become: yes
   gather_facts: no
   roles:
