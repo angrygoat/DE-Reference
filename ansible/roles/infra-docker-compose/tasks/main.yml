@@ -1,7 +1,7 @@
 ---
 - name: Place updated docker-compose.yml file (using environment-specific file)
   become: yes
-  template: src="docker-compose.yml.j2" dest="/etc/docker-compose.yml" owner={{owner}} group={{group}} mode=0644
+  template: src="docker-compose.yml.j2" dest="/etc/docker-compose.yml" owner=ansible group=ansible mode=0644
   tags:
       - install_docker-compose
       - update-docker-compose-file
