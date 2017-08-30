@@ -89,6 +89,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -116,6 +117,7 @@ services:
       driver: "syslog"
       options:
          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -137,6 +139,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -161,6 +164,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -186,6 +190,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -215,6 +220,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /var/log/de/:/home/iplant/log/
       - /etc/localtime:/etc/localtime
@@ -245,6 +251,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /var/log/de/:/home/iplant/log/
       - /etc/localtime:/etc/localtime
@@ -267,6 +274,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -291,6 +299,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     networks:
       default:
         aliases:
@@ -313,6 +322,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes_from:
       - config_image_janitor
     volumes:
@@ -335,6 +345,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -355,6 +366,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -381,6 +393,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -408,6 +421,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -433,6 +447,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -458,6 +473,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -483,6 +499,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -508,6 +525,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -528,6 +546,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -547,6 +566,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -571,6 +591,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -596,6 +617,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -621,6 +643,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -646,6 +669,7 @@ services:
       driver: "syslog"
       options:
           tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -667,6 +691,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -691,6 +716,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -716,6 +742,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -740,6 +767,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -764,6 +792,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -788,6 +817,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -812,6 +842,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -836,6 +867,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -860,6 +892,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -880,6 +913,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -899,6 +933,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -925,6 +960,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -952,6 +988,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -974,6 +1011,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -997,6 +1035,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1021,6 +1060,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1045,6 +1085,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1069,6 +1110,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1093,6 +1135,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1117,6 +1160,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1153,6 +1197,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1184,6 +1229,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1215,6 +1261,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1246,6 +1293,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1278,6 +1326,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1309,6 +1358,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1340,6 +1390,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1372,6 +1423,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1435,6 +1487,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1466,6 +1519,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1497,6 +1551,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1528,6 +1583,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1559,6 +1615,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1590,6 +1647,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1619,6 +1677,7 @@ services:
       driver: "syslog"
       options:
         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
+
     volumes_from:
       - iplant_data_de_ui_nginx
     volumes:
