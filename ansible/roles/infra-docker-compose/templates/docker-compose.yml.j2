@@ -84,7 +84,7 @@ services:
     volumes_from:
       - iplant_data_apps_green
     ports:
-    - "{{apps.port}}:60000"
+      - "{{apps.port}}:60000"
     logging:
       driver: "syslog"
       options:
@@ -1308,6 +1308,7 @@ services:
       - "65420:65420"
     environment:
       - CONSUL_CONNECT=${HOSTNAME}:8500
+      - CONSUL_TOKEN=${CONSUL_TOKEN}
       - NGINX_PROXY_SERVICE_NAME=notification-agent
       - NGINX_PROXY_PORT=65420
       - DE_ENV=${DE_ENV}

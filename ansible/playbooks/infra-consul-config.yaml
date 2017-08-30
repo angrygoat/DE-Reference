@@ -1,6 +1,7 @@
 ---
 - name: Update docker-compose file and config for Consul
-  hosts: consul:registrator:&systems
+  #hosts: consul:registrator:&systems
+  hosts: consul
   become: yes
   roles:
       - role: util-notify-chat

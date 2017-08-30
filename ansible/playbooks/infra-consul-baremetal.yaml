@@ -2,7 +2,8 @@
 
 # combination of 'serial: 1' and 'wait_for' ensures only one consul server is down at a time
 - name: Redeploy consul
-  hosts: consul:&systems
+  #hosts: consul:&systems
+  hosts: docker-ready
   become: yes
   gather_facts: no
   serial: 1
@@ -22,7 +23,8 @@
     - consul
 
 - name: "Set up consul ACL tokens"
-  hosts: consul:&systems
+  #hosts: consul:&systems
+  hosts: docker-ready
   run_once: true
   become: true
   gather_facts: false
