@@ -88,7 +88,7 @@ services:
     env_file: ./dc-env-files/apps.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=apps
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
@@ -115,7 +115,7 @@ services:
     env_file: ./dc-env-files/apps.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=apps
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
@@ -142,7 +142,7 @@ services:
     env_file: ./dc-env-files/clockwork.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_IGNORE=true
     logging:
       driver: "syslog"
@@ -162,7 +162,7 @@ services:
     env_file: ./dc-env-files/data-info.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=data-info
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
@@ -187,7 +187,7 @@ services:
     env_file: ./dc-env-files/data-info.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=data-info
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
@@ -213,7 +213,7 @@ services:
       - "8080"
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - JAVA_TOOL_OPTIONS=-Djava.net.preferIPv4Stack=true
       - SERVICE_60000_IGNORE=true
       - SERVICE_8080_NAME=de
@@ -243,7 +243,7 @@ services:
       - "8080:8080"
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - JAVA_TOOL_OPTIONS=-Djava.net.preferIPv4Stack=true
       - SERVICE_60000_IGNORE=true
       - SERVICE_8080_NAME=de
@@ -272,7 +272,7 @@ services:
     env_file: ./dc-env-files/dewey.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_IGNORE=true
     logging:
       driver: "syslog"
@@ -340,7 +340,7 @@ services:
     env_file: ./dc-env-files/info-typer.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_IGNORE=true
     logging:
       driver: "syslog"
@@ -360,7 +360,7 @@ services:
     env_file: ./dc-env-files/infosquito.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_IGNORE=true
     logging:
       driver: "syslog"
@@ -380,7 +380,7 @@ services:
     env_file: ./dc-env-files/iplant-email.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=iplant-email
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
@@ -407,7 +407,7 @@ services:
     env_file: ./dc-env-files/iplant-email.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=iplant-email
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
@@ -434,7 +434,7 @@ services:
     env_file: ./dc-env-files/iplant-groups.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=iplant-groups
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
@@ -459,7 +459,7 @@ services:
     env_file: ./dc-env-files/iplant-groups.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=iplant-groups
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
@@ -484,7 +484,7 @@ services:
       - "{{ jex.port }}:60000"
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_NAME=jex-adapter
       - SERVICE_CHECK_HTTP=/?expecting=jex-adapter
       - SERVICE_CHECK_INTERVAL=10s
@@ -509,7 +509,7 @@ services:
       - "{{ jex.port }}:60000"
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_NAME=jex-adapter
       - SERVICE_CHECK_HTTP=/?expecting=jex-adapter
       - SERVICE_CHECK_INTERVAL=10s
@@ -533,7 +533,7 @@ services:
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_IGNORE=true
     logging:
       driver: "syslog"
@@ -552,7 +552,7 @@ services:
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_IGNORE=true
     logging:
       driver: "syslog"
@@ -572,7 +572,7 @@ services:
     env_file: ./dc-env-files/kifshare.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=kifshare
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
@@ -597,7 +597,7 @@ services:
     env_file: ./dc-env-files/kifshare.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=kifshare
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
@@ -622,7 +622,7 @@ services:
     env_file: ./dc-env-files/metadata.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=metadata
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
@@ -647,7 +647,7 @@ services:
     env_file: ./dc-env-files/metadata.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=metadata
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
@@ -672,7 +672,7 @@ services:
     env_file: ./dc-env-files/monkey.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_IGNORE=true
     logging:
       driver: "syslog"
@@ -692,7 +692,7 @@ services:
     env_file: ./dc-env-files/notification-agent.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=notification-agent
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
@@ -717,7 +717,7 @@ services:
     env_file: ./dc-env-files/notification-agent.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=notification-agent
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
@@ -741,7 +741,7 @@ services:
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=permissions
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
@@ -765,7 +765,7 @@ services:
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=permissions
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
@@ -789,7 +789,7 @@ services:
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=tagger
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
@@ -813,7 +813,7 @@ services:
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=tagger
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
@@ -837,7 +837,7 @@ services:
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=saved-searches
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
@@ -861,7 +861,7 @@ services:
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=saved-searches
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
@@ -885,7 +885,7 @@ services:
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_IGNORE=true
     logging:
       driver: "syslog"
@@ -904,7 +904,7 @@ services:
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_IGNORE=true
     logging:
       driver: "syslog"
@@ -924,7 +924,7 @@ services:
     env_file: ./dc-env-files/terrain.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=terrain
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
@@ -951,7 +951,7 @@ services:
     env_file: ./dc-env-files/terrain.env
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=terrain
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
@@ -977,7 +977,7 @@ services:
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_IGNORE=true
     ports:
       - "60000"
@@ -998,7 +998,7 @@ services:
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=tree-urls
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
@@ -1022,7 +1022,7 @@ services:
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=tree-urls
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
@@ -1046,7 +1046,7 @@ services:
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=user-preferences
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
@@ -1070,7 +1070,7 @@ services:
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=user-preferences
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
@@ -1094,7 +1094,7 @@ services:
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=user-sessions
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
@@ -1118,7 +1118,7 @@ services:
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - SERVICE_CHECK_HTTP=/?expecting=user-sessions
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
@@ -1160,7 +1160,7 @@ services:
       - SERVICE_65423_CHECK_HTTP=/?expecting=apps
       - SERVICE_65423_CHECK_INTERVAL=10s
       - SERVICE_65423_TAGS=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
     logging:
       driver: "syslog"
       options:
@@ -1192,7 +1192,7 @@ services:
       - SERVICE_65460_CHECK_HTTP=/?expecting=data-info
       - SERVICE_65460_CHECK_INTERVAL=10s
       - SERVICE_65460_TAGS=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
     logging:
       driver: "syslog"
       options:
@@ -1224,7 +1224,7 @@ services:
       - SERVICE_65437_CHECK_HTTP=/?expecting=iplant-email
       - SERVICE_65437_CHECK_INTERVAL=10s
       - SERVICE_65437_TAGS=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
     logging:
       driver: "syslog"
       options:
@@ -1256,7 +1256,7 @@ services:
       - SERVICE_65410_CHECK_HTTP=/?expecting=iplant-groups
       - SERVICE_65410_CHECK_INTERVAL=10s
       - SERVICE_65410_TAGS=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
     logging:
       driver: "syslog"
       options:
@@ -1289,7 +1289,7 @@ services:
       - SERVICE_60000_CHECK_HTTP=/?expecting=jex-adapter
       - SERVICE_60000_CHECK_INTERVAL=10s
       - SERVICE_60000_TAGS=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
     logging:
       driver: "syslog"
       options:
@@ -1321,7 +1321,7 @@ services:
       - SERVICE_65480_CHECK_HTTP=/?expecting=kifshare
       - SERVICE_65480_CHECK_INTERVAL=10s
       - SERVICE_65480_TAGS=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
     logging:
       driver: "syslog"
       options:
@@ -1353,7 +1353,7 @@ services:
       - SERVICE_65431_CHECK_HTTP=/?expecting=metadata
       - SERVICE_65431_CHECK_INTERVAL=10s
       - SERVICE_65431_TAGS=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
     logging:
       driver: "syslog"
       options:
@@ -1385,7 +1385,7 @@ services:
       - SERVICE_65420_CHECK_HTTP=/?expecting=notification-agent
       - SERVICE_65420_CHECK_INTERVAL=10s
       - SERVICE_65420_TAGS=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
     logging:
       driver: "syslog"
       options:
@@ -1417,7 +1417,7 @@ services:
       - SERVICE_65408_CHECK_HTTP=/?expecting=permissions
       - SERVICE_65408_CHECK_INTERVAL=10s
       - SERVICE_65408_TAGS=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
     logging:
       driver: "syslog"
       options:
@@ -1449,7 +1449,7 @@ services:
       - SERVICE_65409_CHECK_HTTP=/?expecting=tagger
       - SERVICE_65409_CHECK_INTERVAL=10s
       - SERVICE_65409_TAGS=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
     logging:
       driver: "syslog"
       options:
@@ -1481,7 +1481,7 @@ services:
       - SERVICE_65406_CHECK_HTTP=/?expecting=saved-searches
       - SERVICE_65406_CHECK_INTERVAL=10s
       - SERVICE_65406_TAGS=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
     logging:
       driver: "syslog"
       options:
@@ -1513,7 +1513,7 @@ services:
       - SERVICE_65425_CHECK_HTTP=/?expecting=terrain
       - SERVICE_65425_CHECK_INTERVAL=10s
       - SERVICE_65425_TAGS=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
     logging:
       driver: "syslog"
       options:
@@ -1545,7 +1545,7 @@ services:
       - SERVICE_65407_CHECK_HTTP=/?expecting=tree-urls
       - SERVICE_65407_CHECK_INTERVAL=10s
       - SERVICE_65407_TAGS=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
     logging:
       driver: "syslog"
       options:
@@ -1577,7 +1577,7 @@ services:
       - SERVICE_65405_CHECK_HTTP=/?expecting=user-preferences
       - SERVICE_65405_CHECK_INTERVAL=10s
       - SERVICE_65405_TAGS=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
     logging:
       driver: "syslog"
       options:
@@ -1609,7 +1609,7 @@ services:
       - SERVICE_65404_CHECK_HTTP=/?expecting=user-sessions
       - SERVICE_65404_CHECK_INTERVAL=10s
       - SERVICE_65404_TAGS=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
     logging:
       driver: "syslog"
       options:
@@ -1630,7 +1630,7 @@ services:
       - "8443:8443"
       - "8444:8444"
     environment:
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
       - CONSUL_CONNECT=${HOSTNAME}:8500
       - DE_ENV=${DE_ENV}
       - SERVICE_80_IGNORE=true
@@ -1639,7 +1639,7 @@ services:
       - SERVICE_443_NAME=de-nginx
       - SERVICE_443_CHECK_SCRIPT=curl -s --fail -k https://${HOSTNAME}/de/ # registrator interpolation of SERVICE_IP works funny, so we'll just use the host-mapped port instead
       - SERVICE_443_TAGS=${DE_ENV}
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
+      - CONSUL_TOKEN={{consul.master_token}}
     logging:
       driver: "syslog"
       options:
