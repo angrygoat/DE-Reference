@@ -1,4 +1,15 @@
 # -*- mode: yaml -*-
+
+# expose: Expose ports without publishing them to the host machine - they’ll only be accessible to linked services. Only the internal port can be specified.
+# ports: allows us to specify port mappings
+
+# trying without de-xdci overlay
+#version: '2'
+#networks:
+#  default:
+#    external:
+#      name: de-${DE_ENV}
+
 services:
   ###
   # Data containers that don't contain service configurations.
@@ -84,12 +95,11 @@ services:
     volumes_from:
       - iplant_data_apps_green
     ports:
-      - "{{apps.port}}:60000"
+      - "{{ apps.port }}:60000"
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "apps_green"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -112,12 +122,11 @@ services:
     volumes_from:
       - iplant_data_apps_blue
     ports:
-      - "{{apps.port}}:60000"
+      - "{{ apps.port }}:60000"
     logging:
       driver: "syslog"
       options:
-         tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "apps_blue"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -138,8 +147,7 @@ services:
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "clockwork"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -159,12 +167,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
     ports:
-      - "{{data_info.port}}:60000"
+      - "{{ data_info.port }}:60000"
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "data_info_green"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -185,12 +192,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
     ports:
-      - "{{data_info.port}}:60000"
+      - "{{ data_info.port }}:60000"
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "data_info_blue"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -203,7 +209,7 @@ services:
     image: discoenv/de:${DE_TAG}
     command: --config consul://${HOSTNAME}:8500
     restart: unless-stopped
-    expose:
+    ports:
       - "8080"
     environment:
       - DE_ENV=${DE_ENV}
@@ -219,8 +225,7 @@ services:
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "de_ui_green"
     volumes:
       - /var/log/de/:/home/iplant/log/
       - /etc/localtime:/etc/localtime
@@ -234,8 +239,8 @@ services:
     image: discoenv/de:${DE_TAG}
     command: --config consul://${HOSTNAME}:8500
     restart: unless-stopped
-    expose:
-      - "8080"
+    ports:
+      - "8080:8080"
     environment:
       - DE_ENV=${DE_ENV}
       - CONSUL_TOKEN=${CONSUL_TOKEN}
@@ -250,8 +255,7 @@ services:
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "de_ui_blue"
     volumes:
       - /var/log/de/:/home/iplant/log/
       - /etc/localtime:/etc/localtime
@@ -273,8 +277,7 @@ services:
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "dewey"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -284,8 +287,8 @@ services:
 
   exim_sender:
     image: discoenv/exim-sender
-    expose:
-      - "25"
+    ports:
+      - "25:25"
     restart: unless-stopped
     environment:
       - DE_ENV=${DE_ENV}
@@ -298,8 +301,7 @@ services:
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "exim_sender"
     networks:
       default:
         aliases:
@@ -321,8 +323,7 @@ services:
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "image_janitor"
     volumes_from:
       - config_image_janitor
     volumes:
@@ -344,8 +345,7 @@ services:
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "info_typer"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -365,8 +365,7 @@ services:
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "infosquito"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -388,12 +387,11 @@ services:
     depends_on:
       - exim_sender
     ports:
-       - "{{iplant_email.port}}:60000"
+      - "{{ iplant_email.port }}:60000"
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "iplant_email_green"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -416,12 +414,11 @@ services:
     depends_on:
       - exim_sender
     ports:
-      - "{{iplant_email.port}}:60000"
+      - "{{ iplant_email.port }}:60000"
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "iplant_email_blue"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -442,12 +439,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
     ports:
-      - "{{iplant_groups.port}}:60000"
+      - "{{ iplant_groups.port }}:60000"
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "iplant_groups_green"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -468,12 +464,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
     ports:
-      - "{{iplant_groups.port}}:60000"
+      - "{{ iplant_groups.port }}:60000"
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "iplant_groups_blue"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -486,7 +481,7 @@ services:
     image: discoenv/jex-adapter:${DE_TAG}
     command: --config consul://${HOSTNAME}:8500
     expose:
-      - "{{jex.port}}:60000"
+      - "{{ jex.port }}:60000"
     environment:
       - DE_ENV=${DE_ENV}
       - CONSUL_TOKEN=${CONSUL_TOKEN}
@@ -498,8 +493,7 @@ services:
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "jex_adapter_green"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -512,7 +506,7 @@ services:
     image: discoenv/jex-adapter:${DE_TAG}
     command: --config consul://${HOSTNAME}:8500
     expose:
-      - "{{jex.port}}:60000"
+      - "{{ jex.port }}:60000"
     environment:
       - DE_ENV=${DE_ENV}
       - CONSUL_TOKEN=${CONSUL_TOKEN}
@@ -524,8 +518,7 @@ services:
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "jex_adapter_blue"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -545,8 +538,7 @@ services:
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "job_status_to_apps_adapter"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -565,8 +557,7 @@ services:
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "job_status_recorder"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -586,12 +577,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
     ports:
-      - "{{kifshare.port}}:60000"
+      - "{{ kifshare.port }}:60000"
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "kifshare_green"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -612,12 +602,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
     ports:
-      - "{{kifshare.port}}:60000"
+      - "{{ kifshare.port }}:60000"
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "kifshare_blue"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -638,12 +627,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
     ports:
-      - "{{metadata.port}}:60000"
+      - "{{ metadata.port }}:60000"
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "metadata_green"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -664,12 +652,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
     ports:
-      - "{{metadata.port}}:60000"
+      - "{{ metadata.port }}:60000"
     logging:
       driver: "syslog"
       options:
-          tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "metadata_blue"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -690,8 +677,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "monkey"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -711,12 +697,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
     ports:
-      - "{{notificationagent.port}}:60000"
+      - "{{ notificationagent.port }}:60000"
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "notification_agent_green"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -737,12 +722,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
     ports:
-      - "{{notificationagent.port}}:60000"
+      - "{{ notificationagent.port }}:60000"
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "notification_agent_blue"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -762,12 +746,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
     ports:
-      - "{{permissions.port}}:60000"
+      - "{{ permissions.port }}:60000"
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "permissions_green"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -787,12 +770,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
     ports:
-      - "{{permissions.port}}:60000"
+      - "{{ permissions.port }}:60000"
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "permissions_blue"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -812,12 +794,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
     ports:
-      - "{{tagger.port}}:60000"
+      - "{{ tagger.port }}:60000"
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "tagger_green"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -837,12 +818,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
     ports:
-      - "{{tagger.port}}:60000"
+      - "{{ tagger.port }}:60000"
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "tagger_blue"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -862,12 +842,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
     ports:
-      - "{{saved_searches.port}}:60000"
+      - "{{ saved_searches.port }}:60000"
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "saved_searches_green"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -887,12 +866,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
     ports:
-      - "{{saved_searches.port}}:60000"
+      - "{{ saved_searches.port }}:60000"
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "saved_searches_blue"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -912,8 +890,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "templeton_periodic"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -932,8 +909,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "templeton_incremental"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -955,12 +931,11 @@ services:
     volumes_from:
       - iplant_data_terrain_green
     ports:
-      - "{{terrain.port}}:60000"
+      - "{{ terrain.port }}"60000"
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "terrain_green"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -983,12 +958,11 @@ services:
     volumes_from:
       - iplant_data_terrain_blue
     ports:
-      - "{{terrain.port}}:60000"
+      - "{{ terrain.port }}:60000"
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "terrain_blue"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1010,8 +984,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "timelord"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1030,12 +1003,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
     ports:
-      - "{{tree_urls.port}}:60000"
+      - "{{ tree_urls.port }}:60000"
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "tree_urls_green"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1055,12 +1027,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
     ports:
-      - "{{tree_urls.port}}:60000"
+      - "{{ tree_urls.port }}:60000"
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "{{.ImageName}}/{{.Name}}"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1080,12 +1051,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
     ports:
-      - "{{user_preferences.port}}:60000"
+      - "{{ user_preferences.port }}:60000"
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "user_preferences_green"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1105,12 +1075,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
     ports:
-      - "{{user_preferences.port}}:60000"
+      - "{{ user_preferences.port }}:60000"
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "user_preferences_blue"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1130,12 +1099,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
     ports:
-      - "{{user_sessions.port}}:60000"
+      - "{{ user_sessions.port }}:60000"
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "user_sessions_green"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1155,12 +1123,11 @@ services:
       - SERVICE_CHECK_INTERVAL=10s
       - SERVICE_TAGS=${DE_ENV},blue,${DE_ENV}-blue
     ports:
-      - "{{user_sessions.port}}:60000"
+      - "{{ user_sessions.port }}:60000"
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "user_sessions_blue"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1196,8 +1163,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "apps_nginx"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1228,8 +1194,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "data_info_nginx"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1260,8 +1225,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "iplant_email_nginx"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1292,8 +1256,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "iplant_groups_nginx"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1325,8 +1288,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "jex_adapter_nginx"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1357,8 +1319,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "kifshare_nginx"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1389,8 +1350,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "metadata_nginx"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1409,7 +1369,6 @@ services:
       - "65420:65420"
     environment:
       - CONSUL_CONNECT=${HOSTNAME}:8500
-      - CONSUL_TOKEN=${CONSUL_TOKEN}
       - NGINX_PROXY_SERVICE_NAME=notification-agent
       - NGINX_PROXY_PORT=65420
       - DE_ENV=${DE_ENV}
@@ -1422,8 +1381,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "notification_agent_nginx"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1454,8 +1412,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "permissions_nginx"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1486,8 +1443,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "tagger_nginx"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1518,8 +1474,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "saved_searches_nginx"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1550,8 +1505,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "terrain_nginx"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1582,8 +1536,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "tree_urls_nginx"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1614,8 +1567,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "user_preferences_nginx"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1646,8 +1598,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "user_sessions_nginx"
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -1676,8 +1627,7 @@ services:
     logging:
       driver: "syslog"
       options:
-        tag: {%raw%}"{{.ImageName}}/{{.Name}}"{%endraw%}
-
+        tag: "de_ui_nginx"
     volumes_from:
       - iplant_data_de_ui_nginx
     volumes:
