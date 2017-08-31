@@ -931,7 +931,7 @@ services:
     volumes_from:
       - iplant_data_terrain_green
     ports:
-      - "{{ terrain.port }}"60000"
+      - "{{ terrain.port }}:"60000"
     logging:
       driver: "syslog"
       options:
