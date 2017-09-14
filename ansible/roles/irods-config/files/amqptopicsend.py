@@ -24,7 +24,7 @@ connection = pika.BlockingConnection(
 channel = connection.channel()
 
 channel.exchange_declare(exchange=exchange,
-                         type='topic',
+                         exchange_type='topic',
                          durable=(not ephemeral),
                          auto_delete=ephemeral)
 
