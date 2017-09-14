@@ -3,8 +3,9 @@
 # expose: Expose ports without publishing them to the host machine - they’ll only be accessible to linked services. Only the internal port can be specified.
 # ports: allows us to specify port mappings
 
+version: '2'
+
 # trying without de-xdci overlay
-#version: '2'
 #networks:
 #  default:
 #    external:
@@ -14,6 +15,13 @@ services:
   ###
   # Data containers that don't contain service configurations.
   ###
+
+  iplant_data_apps:
+    image: x-psql.edc.renci.org:443/iplant_data:latest
+    labels:
+      org.cyverse.name: "apps"
+      org.cyverse.type: "data"
+
   iplant_data_apps_green:
     image: x-psql.edc.renci.org:443/iplant_data:latest
     labels:
@@ -26,6 +34,12 @@ services:
     labels:
       org.cyverse.name: "apps"
       org.cyverse.color: "blue"
+      org.cyverse.type: "data"
+
+  iplant_data_de_ui:
+    image: x-psql.edc.renci.org:443/iplant_data:latest
+    labels:
+      org.cyverse.name: "ui"
       org.cyverse.type: "data"
 
   iplant_data_de_ui_green:
@@ -49,6 +63,12 @@ services:
       org.cyverse.proxy: ""
       org.cyverse.type: "data"
 
+  iplant_data_terrain:
+    image: x-psql.edc.renci.org:443/iplant_data:latest
+    labels:
+      org.cyverse.name: "terrain"
+      org.cyverse.type: "data"
+
   iplant_data_terrain_green:
     image: x-psql.edc.renci.org:443/iplant_data:latest
     labels:
@@ -66,6 +86,7 @@ services:
   ###
   # Set up the configuration containers
   ###
+
   config_image_janitor:
     image: x-psql.edc.renci.org:443/de-configs-${DE_ENV}:${DE_TAG}
     labels:
@@ -81,6 +102,33 @@ services:
   ###
   # Service and UI definitions
   ###
+
+  apps:
+    image: discoenv/apps:${DE_TAG}
+    command: --config consul://${HOSTNAME}:8500
+    restart: unless-stopped
+    env_file: ./dc-env-files/apps.env
+    environment:
+      - DE_ENV=${DE_ENV}
+      - CONSUL_TOKEN={{consul.master_token}}
+      - SERVICE_CHECK_HTTP=/?expecting=apps
+      - SERVICE_CHECK_INTERVAL=10s
+      - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
+    volumes_from:
+      - iplant_data_apps
+    ports:
+      - "{{ apps.port }}:60000"
+    logging:
+      driver: "syslog"
+      options:
+        tag: "apps"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    labels:
+      org.cyverse.name: "apps"
+      org.cyverse.type: "service"
+
   apps_green:
     image: discoenv/apps:${DE_TAG}
     command: --config consul://${HOSTNAME}:8500
@@ -155,6 +203,30 @@ services:
       org.cyverse.name: "clockwork"
       org.cyverse.type: "service"
 
+  data_info:
+    image: discoenv/data-info:${DE_TAG}
+    command: --config consul://${HOSTNAME}:8500
+    restart: unless-stopped
+    env_file: ./dc-env-files/data-info.env
+    environment:
+      - DE_ENV=${DE_ENV}
+      - CONSUL_TOKEN={{consul.master_token}}
+      - SERVICE_CHECK_HTTP=/?expecting=data-info
+      - SERVICE_CHECK_INTERVAL=10s
+      - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
+    ports:
+      - "{{ data_info.port }}:60000"
+    logging:
+      driver: "syslog"
+      options:
+        tag: "data_info"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    labels:
+      org.cyverse.name: "data-info"
+      org.cyverse.type: "service"
+
   data_info_green:
     image: discoenv/data-info:${DE_TAG}
     command: --config consul://${HOSTNAME}:8500
@@ -204,6 +276,35 @@ services:
       org.cyverse.name: "data-info"
       org.cyverse.type: "service"
       org.cyverse.color: "blue"
+
+  de_ui:
+    image: discoenv/de:${DE_TAG}
+    command: --config consul://${HOSTNAME}:8500
+    restart: unless-stopped
+    ports:
+      - "8080"
+    environment:
+      - DE_ENV=${DE_ENV}
+      - CONSUL_TOKEN={{consul.master_token}}
+      - JAVA_TOOL_OPTIONS=-Djava.net.preferIPv4Stack=true
+      - SERVICE_60000_IGNORE=true
+      - SERVICE_8080_NAME=de
+      - SERVICE_8080_CHECK_HTTP=/de/
+      - SERVICE_8080_CHECK_INTERVAL=10s
+      - SERVICE_8080_TAGS=${DE_ENV}
+    volumes_from:
+      - iplant_data_de_ui
+    logging:
+      driver: "syslog"
+      options:
+        tag: "de_ui_"
+    volumes:
+      - /var/log/de/:/home/iplant/log/
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    labels:
+      org.cyverse.name: "ui"
+      org.cyverse.type: "service"
 
   de_ui_green:
     image: discoenv/de:${DE_TAG}
@@ -373,6 +474,32 @@ services:
       org.cyverse.name: "infosquito"
       org.cyverse.type: "service"
 
+  iplant_email:
+    image: discoenv/iplant-email:${DE_TAG}
+    command: --config consul://${HOSTNAME}:8500
+    restart: unless-stopped
+    env_file: ./dc-env-files/iplant-email.env
+    environment:
+      - DE_ENV=${DE_ENV}
+      - CONSUL_TOKEN={{consul.master_token}}
+      - SERVICE_CHECK_HTTP=/?expecting=iplant-email
+      - SERVICE_CHECK_INTERVAL=10s
+      - SERVICE_TAGS=${DE_ENV}
+    depends_on:
+      - exim_sender
+    ports:
+      - "{{ iplant_email.port }}:60000"
+    logging:
+      driver: "syslog"
+      options:
+        tag: "iplant_email"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    labels:
+      org.cyverse.name: "iplant-email"
+      org.cyverse.type: "service"
+
   iplant_email_green:
     image: discoenv/iplant-email:${DE_TAG}
     command: --config consul://${HOSTNAME}:8500
@@ -427,6 +554,30 @@ services:
       org.cyverse.type: "service"
       org.cyverse.color: "blue"
 
+  iplant_groups:
+    image: discoenv/iplant-groups:${DE_TAG}
+    command: --config consul://${HOSTNAME}:8500
+    restart: unless-stopped
+    env_file: ./dc-env-files/iplant-groups.env
+    environment:
+      - DE_ENV=${DE_ENV}
+      - CONSUL_TOKEN={{consul.master_token}}
+      - SERVICE_CHECK_HTTP=/?expecting=iplant-groups
+      - SERVICE_CHECK_INTERVAL=10s
+      - SERVICE_TAGS=${DE_ENV}
+    ports:
+      - "{{ iplant_groups.port }}:60000"
+    logging:
+      driver: "syslog"
+      options:
+        tag: "iplant_groups"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    labels:
+      org.cyverse.name: "iplant-groups"
+      org.cyverse.type: "service"
+
   iplant_groups_green:
     image: discoenv/iplant-groups:${DE_TAG}
     command: --config consul://${HOSTNAME}:8500
@@ -477,10 +628,34 @@ services:
       org.cyverse.type: "service"
       org.cyverse.color: "blue"
 
+  jex_adapter:
+    image: discoenv/jex-adapter:${DE_TAG}
+    command: --config consul://${HOSTNAME}:8500
+    ports:
+      - "{{ jex.port }}:60000"
+    environment:
+      - DE_ENV=${DE_ENV}
+      - CONSUL_TOKEN={{consul.master_token}}
+      - SERVICE_NAME=jex-adapter
+      - SERVICE_CHECK_HTTP=/?expecting=jex-adapter
+      - SERVICE_CHECK_INTERVAL=10s
+      - SERVICE_TAGS=${DE_ENV}
+    restart: unless-stopped
+    logging:
+      driver: "syslog"
+      options:
+        tag: "jex_adapter"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    labels:
+      org.cyverse.name: "jex-adapter"
+      org.cyverse.type: "service"
+
   jex_adapter_green:
     image: discoenv/jex-adapter:${DE_TAG}
     command: --config consul://${HOSTNAME}:8500
-    expose:
+    ports:
       - "{{ jex.port }}:60000"
     environment:
       - DE_ENV=${DE_ENV}
@@ -505,7 +680,7 @@ services:
   jex_adapter_blue:
     image: discoenv/jex-adapter:${DE_TAG}
     command: --config consul://${HOSTNAME}:8500
-    expose:
+    ports:
       - "{{ jex.port }}:60000"
     environment:
       - DE_ENV=${DE_ENV}
@@ -565,6 +740,30 @@ services:
       org.cyverse.name: "job-status-recorder"
       org.cyverse.type: "service"
 
+  kifshare:
+    image: discoenv/kifshare:${DE_TAG}
+    command: --config consul://${HOSTNAME}:8500
+    restart: unless-stopped
+    env_file: ./dc-env-files/kifshare.env
+    environment:
+      - DE_ENV=${DE_ENV}
+      - CONSUL_TOKEN={{consul.master_token}}
+      - SERVICE_CHECK_HTTP=/?expecting=kifshare
+      - SERVICE_CHECK_INTERVAL=10s
+      - SERVICE_TAGS=${DE_ENV}
+    ports:
+      - "{{ kifshare.port }}:60000"
+    logging:
+      driver: "syslog"
+      options:
+        tag: "kifshare"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    labels:
+      org.cyverse.name: "kifshare"
+      org.cyverse.type: "service"
+
   kifshare_green:
     image: discoenv/kifshare:${DE_TAG}
     command: --config consul://${HOSTNAME}:8500
@@ -614,6 +813,30 @@ services:
       org.cyverse.name: "kifshare"
       org.cyverse.type: "service"
       org.cyverse.color: "blue"
+
+  metadata:
+    image: discoenv/metadata:${DE_TAG}
+    command: --config consul://${HOSTNAME}:8500
+    restart: unless-stopped
+    env_file: ./dc-env-files/metadata.env
+    environment:
+      - DE_ENV=${DE_ENV}
+      - CONSUL_TOKEN={{consul.master_token}}
+      - SERVICE_CHECK_HTTP=/?expecting=metadata
+      - SERVICE_CHECK_INTERVAL=10s
+      - SERVICE_TAGS=${DE_ENV}
+    ports:
+      - "{{ metadata.port }}:60000"
+    logging:
+      driver: "syslog"
+      options:
+        tag: "metadata"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    labels:
+      org.cyverse.name: "metadata"
+      org.cyverse.type: "service"
 
   metadata_green:
     image: discoenv/metadata:${DE_TAG}
@@ -685,6 +908,30 @@ services:
       org.cyverse.name: "monkey"
       org.cyverse.type: "service"
 
+  notification_agent:
+    image: discoenv/notification-agent:${DE_TAG}
+    command: --config consul://${HOSTNAME}:8500
+    restart: unless-stopped
+    env_file: ./dc-env-files/notification-agent.env
+    environment:
+      - DE_ENV=${DE_ENV}
+      - CONSUL_TOKEN={{consul.master_token}}
+      - SERVICE_CHECK_HTTP=/?expecting=notification-agent
+      - SERVICE_CHECK_INTERVAL=10s
+      - SERVICE_TAGS=${DE_ENV}
+    ports:
+      - "{{ notificationagent.port }}:60000"
+    logging:
+      driver: "syslog"
+      options:
+        tag: "notification_agent"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    labels:
+      org.cyverse.name: "notification-agent"
+      org.cyverse.type: "service"
+
   notification_agent_green:
     image: discoenv/notification-agent:${DE_TAG}
     command: --config consul://${HOSTNAME}:8500
@@ -735,6 +982,29 @@ services:
       org.cyverse.type: "service"
       org.cyverse.color: "blue"
 
+  permissions:
+    image: discoenv/permissions:${DE_TAG}
+    command: --config consul://${HOSTNAME}:8500 --host 0.0.0.0 --port 60000
+    restart: unless-stopped
+    environment:
+      - DE_ENV=${DE_ENV}
+      - CONSUL_TOKEN={{consul.master_token}}
+      - SERVICE_CHECK_HTTP=/?expecting=permissions
+      - SERVICE_CHECK_INTERVAL=10s
+      - SERVICE_TAGS=${DE_ENV}
+    ports:
+      - "{{ permissions.port }}:60000"
+    logging:
+      driver: "syslog"
+      options:
+        tag: "permissions"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    labels:
+      org.cyverse.name: "permissions"
+      org.cyverse.type: "service"
+
   permissions_green:
     image: discoenv/permissions:${DE_TAG}
     command: --config consul://${HOSTNAME}:8500 --host 0.0.0.0 --port 60000
@@ -783,6 +1053,29 @@ services:
       org.cyverse.type: "service"
       org.cyverse.color: "blue"
 
+  tagger:
+    image: discoenv/tagger:${DE_TAG}
+    command: --host 0.0.0.0 --port 60000
+    restart: unless-stopped
+    environment:
+      - DE_ENV=${DE_ENV}
+      - CONSUL_TOKEN={{consul.master_token}}
+      - SERVICE_CHECK_HTTP=/?expecting=tagger
+      - SERVICE_CHECK_INTERVAL=10s
+      - SERVICE_TAGS=${DE_ENV}
+    ports:
+      - "{{ tagger.port }}:60000"
+    logging:
+      driver: "syslog"
+      options:
+        tag: "tagger"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    labels:
+      org.cyverse.name: "tagger"
+      org.cyverse.type: "service"
+
   tagger_green:
     image: discoenv/tagger:${DE_TAG}
     command: --host 0.0.0.0 --port 60000
@@ -830,6 +1123,29 @@ services:
       org.cyverse.name: "tagger"
       org.cyverse.type: "service"
       org.cyverse.color: "blue"
+
+  saved_searches:
+    image: discoenv/saved-searches:${DE_TAG}
+    command: --config consul://${HOSTNAME}:8500
+    restart: unless-stopped
+    environment:
+      - DE_ENV=${DE_ENV}
+      - CONSUL_TOKEN={{consul.master_token}}
+      - SERVICE_CHECK_HTTP=/?expecting=saved-searches
+      - SERVICE_CHECK_INTERVAL=10s
+      - SERVICE_TAGS=${DE_ENV},green,${DE_ENV}-green
+    ports:
+      - "{{ saved_searches.port }}:60000"
+    logging:
+      driver: "syslog"
+      options:
+        tag: "saved_searches"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    labels:
+      org.cyverse.name: "saved-searches"
+      org.cyverse.type: "service"
 
   saved_searches_green:
     image: discoenv/saved-searches:${DE_TAG}
@@ -917,6 +1233,32 @@ services:
       org.cyverse.name: "templeton-incremental"
       org.cyverse.type: "service"
 
+  terrain:
+    image: discoenv/terrain:${DE_TAG}
+    command: --config consul://${HOSTNAME}:8500
+    restart: unless-stopped
+    env_file: ./dc-env-files/terrain.env
+    environment:
+      - DE_ENV=${DE_ENV}
+      - CONSUL_TOKEN={{consul.master_token}}
+      - SERVICE_CHECK_HTTP=/?expecting=terrain
+      - SERVICE_CHECK_INTERVAL=10s
+      - SERVICE_TAGS=${DE_ENV}
+    volumes_from:
+      - iplant_data_terrain
+    ports:
+      - "{{ terrain.port }}:60000"
+    logging:
+      driver: "syslog"
+      options:
+        tag: "terrain"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    labels:
+      org.cyverse.name: "terrain"
+      org.cyverse.type: "service"
+
   terrain_green:
     image: discoenv/terrain:${DE_TAG}
     command: --config consul://${HOSTNAME}:8500
@@ -992,6 +1334,29 @@ services:
       org.cyverse.name: "timelord"
       org.cyverse.type: "service"
 
+  tree_urls:
+    image: discoenv/tree-urls:${DE_TAG}
+    command: --config consul://${HOSTNAME}:8500
+    restart: unless-stopped
+    environment:
+      - DE_ENV=${DE_ENV}
+      - CONSUL_TOKEN={{consul.master_token}}
+      - SERVICE_CHECK_HTTP=/?expecting=tree-urls
+      - SERVICE_CHECK_INTERVAL=10s
+      - SERVICE_TAGS=${DE_ENV}
+    ports:
+      - "{{ tree_urls.port }}:60000"
+    logging:
+      driver: "syslog"
+      options:
+        tag: "tree_urls"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    labels:
+      org.cyverse.name: "tree-urls"
+      org.cyverse.type: "service"
+
   tree_urls_green:
     image: discoenv/tree-urls:${DE_TAG}
     command: --config consul://${HOSTNAME}:8500
@@ -1040,6 +1405,29 @@ services:
       org.cyverse.type: "service"
       org.cyverse.color: "blue"
 
+  user_preferences:
+    image: discoenv/user-preferences:${DE_TAG}
+    command: --config consul://${HOSTNAME}:8500
+    restart: unless-stopped
+    environment:
+      - DE_ENV=${DE_ENV}
+      - CONSUL_TOKEN={{consul.master_token}}
+      - SERVICE_CHECK_HTTP=/?expecting=user-preferences
+      - SERVICE_CHECK_INTERVAL=10s
+      - SERVICE_TAGS=${DE_ENV}
+    ports:
+      - "{{ user_preferences.port }}:60000"
+    logging:
+      driver: "syslog"
+      options:
+        tag: "user_preferences"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    labels:
+      org.cyverse.name: "user-preferences"
+      org.cyverse.type: "service"
+
   user_preferences_green:
     image: discoenv/user-preferences:${DE_TAG}
     command: --config consul://${HOSTNAME}:8500
@@ -1087,6 +1475,29 @@ services:
       org.cyverse.name: "user-preferences"
       org.cyverse.type: "service"
       org.cyverse.color: "blue"
+
+  user_sessions:
+    image: discoenv/user-sessions:${DE_TAG}
+    command: --config consul://${HOSTNAME}:8500
+    restart: unless-stopped
+    environment:
+      - DE_ENV=${DE_ENV}
+      - CONSUL_TOKEN={{consul.master_token}}
+      - SERVICE_CHECK_HTTP=/?expecting=user-sessions
+      - SERVICE_CHECK_INTERVAL=10s
+      - SERVICE_TAGS=${DE_ENV}
+    ports:
+      - "{{ user_sessions.port }}:60000"
+    logging:
+      driver: "syslog"
+      options:
+        tag: "user_sessions"
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    labels:
+      org.cyverse.name: "user-sessions"
+      org.cyverse.type: "service"
 
   user_sessions_green:
     image: discoenv/user-sessions:${DE_TAG}
@@ -1639,7 +2050,6 @@ services:
       - SERVICE_443_NAME=de-nginx
       - SERVICE_443_CHECK_SCRIPT=curl -s --fail -k https://${HOSTNAME}/de/ # registrator interpolation of SERVICE_IP works funny, so we'll just use the host-mapped port instead
       - SERVICE_443_TAGS=${DE_ENV}
-      - CONSUL_TOKEN={{consul.master_token}}
     logging:
       driver: "syslog"
       options:
