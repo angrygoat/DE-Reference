@@ -34,7 +34,7 @@
 - name: place libmsiSetAVU.so plugin 
   sudo: yes
   sudo_user: irods
-  copy: src=libmsiSetAVU.so dest=/var/lib/irods/plugins/microservices/ owner=irods group=irods mode=0644
+  copy: src=libmsiSetAVU.so dest=/usr/lib/irods/plugins/microservices/ owner=irods group=irods mode=0644
 
 - name: echo ruleset warning
   debug: msg="Custom DE iRODS rulebases installed, including core.re. Please activate rules as needed by adding them to /etc/irods/server_config.json beneath re_rulebase_set and restarting iRODS."
