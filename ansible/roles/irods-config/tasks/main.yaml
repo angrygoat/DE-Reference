@@ -2,6 +2,9 @@
 
 # drop in DE rulesets
 
+- name: python2-pika is a requirement
+  yum: name=python2-pika state=latest
+
 - name: copy DE rulesets into place
   sudo: yes
   sudo_user: irods
